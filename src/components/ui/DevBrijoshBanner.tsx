@@ -6,13 +6,17 @@ import { BjorkDecodeText } from './BjorkDecodeText';
 export interface DevBrijoshBannerProps {
   eyebrow?: string;
   tag?: string;
-  title: string;
+  badgeText?: string;
+  title?: string;
+  headline?: string;
   description: string;
   primaryButtonText?: string;
   primaryButtonAction?: () => void;
+  onPrimaryClick?: () => void;
   primaryButtonIcon?: React.ReactNode;
   secondaryButtonText?: string;
   secondaryButtonAction?: () => void;
+  onSecondaryClick?: () => void;
   secondaryButtonIcon?: React.ReactNode;
   badgeIcon?: React.ReactNode;
   extraContent?: React.ReactNode;
@@ -25,13 +29,17 @@ export interface DevBrijoshBannerProps {
 export const DevBrijoshBanner: React.FC<DevBrijoshBannerProps> = ({
   eyebrow,
   tag,
+  badgeText,
   title,
+  headline,
   description,
   primaryButtonText,
   primaryButtonAction,
+  onPrimaryClick,
   primaryButtonIcon,
   secondaryButtonText,
   secondaryButtonAction,
+  onSecondaryClick,
   secondaryButtonIcon,
   badgeIcon,
   extraContent,
@@ -40,6 +48,10 @@ export const DevBrijoshBanner: React.FC<DevBrijoshBannerProps> = ({
   layout = 'horizontal',
   accentColor = '#EF4444' // Signal Red
 }) => {
+  const displayTag = tag || badgeText;
+  const displayTitle = title || headline || '';
+  const handlePrimary = primaryButtonAction || onPrimaryClick;
+  const handleSecondary = secondaryButtonAction || onSecondaryClick;
   const [isBannerHovered, setIsBannerHovered] = useState(false);
   const [primaryBtnHovered, setPrimaryBtnHovered] = useState(false);
   const [secondaryBtnHovered, setSecondaryBtnHovered] = useState(false);
@@ -90,19 +102,19 @@ export const DevBrijoshBanner: React.FC<DevBrijoshBannerProps> = ({
           <div className="max-w-2xl space-y-3.5 text-left">
             
             {/* Eyebrow with Signal Red Bar */}
-            {(eyebrow || tag) && (
+            {(eyebrow || displayTag) && (
               <div className="inline-flex items-center gap-2.5 font-mono text-[11px] text-white/70 uppercase tracking-wider">
                 <span className="w-6 h-[2px] bg-red-500 rounded-full shrink-0" />
                 {eyebrow && <span className="font-bold text-white tracking-widest">{eyebrow}</span>}
-                {eyebrow && tag && <span className="text-white/40">•</span>}
-                {tag && <span className="text-red-400 font-semibold">{tag}</span>}
+                {eyebrow && displayTag && <span className="text-white/40">•</span>}
+                {displayTag && <span className="text-red-400 font-semibold">{displayTag}</span>}
               </div>
             )}
 
             {/* Headline with Isaiah Bjork Decode Text */}
             <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-white leading-tight font-sans">
               <BjorkDecodeText 
-                text={title} 
+                text={displayTitle} 
                 trigger="inView" 
                 charset="blocks" 
                 accentColor={accentColor}
@@ -123,7 +135,7 @@ export const DevBrijoshBanner: React.FC<DevBrijoshBannerProps> = ({
               
               {primaryButtonText && (
                 <button
-                  onClick={primaryButtonAction}
+                  onClick={handlePrimary}
                   onMouseEnter={() => setPrimaryBtnHovered(true)}
                   onMouseLeave={() => setPrimaryBtnHovered(false)}
                   className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full text-xs font-mono font-bold uppercase tracking-wider text-stone-950 bg-white hover:bg-stone-100 shadow-[0_4px_20px_rgba(255,255,255,0.2)] transition-all duration-200 active:scale-[0.98] cursor-pointer group/btn"
@@ -142,7 +154,7 @@ export const DevBrijoshBanner: React.FC<DevBrijoshBannerProps> = ({
 
               {secondaryButtonText && (
                 <button
-                  onClick={secondaryButtonAction}
+                  onClick={handleSecondary}
                   onMouseEnter={() => setSecondaryBtnHovered(true)}
                   onMouseLeave={() => setSecondaryBtnHovered(false)}
                   className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full text-xs font-mono uppercase tracking-wider text-white bg-white/10 hover:bg-white/20 border border-white/20 backdrop-blur-md shadow-xs transition-all duration-200 active:scale-[0.98] cursor-pointer font-semibold"
@@ -174,19 +186,19 @@ export const DevBrijoshBanner: React.FC<DevBrijoshBannerProps> = ({
           )}
 
           {/* Eyebrow */}
-          {(eyebrow || tag) && (
+          {(eyebrow || displayTag) && (
             <div className="inline-flex items-center gap-2.5 font-mono text-[11px] text-white/70 uppercase tracking-wider">
               <span className="w-5 h-[2px] bg-red-500 rounded-full shrink-0" />
               {eyebrow && <span className="font-bold text-white tracking-widest">{eyebrow}</span>}
-              {eyebrow && tag && <span className="text-white/40">•</span>}
-              {tag && <span className="text-red-400 font-semibold">{tag}</span>}
+              {eyebrow && displayTag && <span className="text-white/40">•</span>}
+              {displayTag && <span className="text-red-400 font-semibold">{displayTag}</span>}
             </div>
           )}
 
           {/* Headline */}
           <h4 className="text-xl sm:text-2xl font-bold tracking-tight text-white leading-tight font-sans">
             <BjorkDecodeText 
-              text={title} 
+              text={displayTitle} 
               trigger="inView" 
               charset="blocks" 
               accentColor={accentColor}
@@ -206,7 +218,7 @@ export const DevBrijoshBanner: React.FC<DevBrijoshBannerProps> = ({
               
               {primaryButtonText && (
                 <button
-                  onClick={primaryButtonAction}
+                  onClick={handlePrimary}
                   onMouseEnter={() => setPrimaryBtnHovered(true)}
                   onMouseLeave={() => setPrimaryBtnHovered(false)}
                   className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl text-xs font-mono font-bold uppercase tracking-wider text-stone-950 bg-white hover:bg-stone-100 shadow-sm transition-all duration-200 active:scale-[0.98] cursor-pointer group/btn"
@@ -225,7 +237,7 @@ export const DevBrijoshBanner: React.FC<DevBrijoshBannerProps> = ({
 
               {secondaryButtonText && (
                 <button
-                  onClick={secondaryButtonAction}
+                  onClick={handleSecondary}
                   onMouseEnter={() => setSecondaryBtnHovered(true)}
                   onMouseLeave={() => setSecondaryBtnHovered(false)}
                   className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl text-xs font-mono font-bold uppercase tracking-wider text-stone-200 bg-white/10 hover:bg-white/20 border border-white/20 backdrop-blur-md shadow-xs transition-all duration-200 active:scale-[0.98] cursor-pointer"

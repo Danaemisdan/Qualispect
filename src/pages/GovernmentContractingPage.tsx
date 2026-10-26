@@ -1,0 +1,119 @@
+import React from 'react';
+import { 
+  Landmark, 
+  ShieldCheck, 
+  FileText, 
+  Download, 
+  CheckCircle2, 
+  ArrowRight,
+  Printer,
+  Phone,
+  Mail
+} from 'lucide-react';
+import { PageId } from '../types';
+import { GovernmentContractingSection } from '../components/sections/GovernmentContractingSection';
+import { DevBrijoshBanner } from '../components/ui/DevBrijoshBanner';
+import { BjorkDecodeText } from '../components/ui/BjorkDecodeText';
+
+interface GovernmentContractingPageProps {
+  navigateTo: (page: PageId) => void;
+  openCapabilityModal: () => void;
+  openQuoteModal: () => void;
+}
+
+export const GovernmentContractingPage: React.FC<GovernmentContractingPageProps> = ({
+  navigateTo,
+  openCapabilityModal,
+  openQuoteModal
+}) => {
+  return (
+    <div className="bg-[#FAFAF9] text-stone-900">
+      
+      {/* Hero Header */}
+      <div className="bg-[#FAFAF9] pt-28 sm:pt-36 pb-16 relative overflow-hidden border-b border-stone-200/80">
+        <div className="absolute inset-0 bg-dot-grid-light opacity-60 pointer-events-none" />
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="max-w-3xl space-y-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 border border-amber-200 text-amber-800 text-xs font-mono font-bold uppercase tracking-wider">
+              <Landmark className="w-3.5 h-3.5 text-amber-600" />
+              <span>PAGE 09 // U.S. FEDERAL &amp; DEFENSE CONTRACTING</span>
+            </div>
+
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight font-sans uppercase text-stone-900">
+              <BjorkDecodeText text="Federal Contracting Desk" />
+            </h1>
+
+            <p className="text-lg text-stone-600 leading-relaxed font-normal">
+              Qualispect Inc. provides third-party technical inspection, quality assurance, and non-destructive examination support for U.S. Federal Government departments, defense prime contractors, and civil infrastructure agencies.
+            </p>
+
+            {/* Federal Credentials Strip */}
+            <div className="pt-4 grid grid-cols-2 sm:grid-cols-4 gap-4 text-stone-800 font-mono text-xs">
+              <div className="p-3 bg-white rounded-xl border border-stone-200 shadow-2xs">
+                <span className="text-stone-400 block text-[10px] uppercase">CAGE Code</span>
+                <span className="text-base font-bold text-stone-900 block mt-0.5">7S2L7</span>
+                <span className="text-emerald-700 text-[11px]">DOD &amp; Federal Verified</span>
+              </div>
+              <div className="p-3 bg-white rounded-xl border border-stone-200 shadow-2xs">
+                <span className="text-stone-400 block text-[10px] uppercase">Unique Entity ID (UEI)</span>
+                <span className="text-base font-bold text-stone-900 block mt-0.5">L3C9LLNA2KJ9</span>
+                <span className="text-emerald-700 text-[11px]">SAM.gov Active</span>
+              </div>
+              <div className="p-3 bg-white rounded-xl border border-stone-200 shadow-2xs">
+                <span className="text-stone-400 block text-[10px] uppercase">Primary NAICS</span>
+                <span className="text-base font-bold text-stone-900 block mt-0.5">213112</span>
+                <span className="text-stone-600 text-[11px]">Support Activities</span>
+              </div>
+              <div className="p-3 bg-white rounded-xl border border-stone-200 shadow-2xs">
+                <span className="text-stone-400 block text-[10px] uppercase">Federal Desk</span>
+                <span className="text-base font-bold text-stone-900 block mt-0.5">Houston, TX</span>
+                <span className="text-stone-600 text-[11px]">Direct Contracting Officer Support</span>
+              </div>
+            </div>
+
+            <div className="pt-2 flex flex-wrap items-center gap-3">
+              <button
+                onClick={openCapabilityModal}
+                className="bg-stone-900 hover:bg-black text-white font-mono font-medium text-xs uppercase px-6 py-3 rounded-full flex items-center gap-2 shadow-sm transition-all cursor-pointer active:scale-95"
+              >
+                <Download className="w-3.5 h-3.5 text-stone-300" />
+                <span>Download Capability Statement (PDF)</span>
+              </button>
+
+              <button
+                onClick={openQuoteModal}
+                className="bg-white hover:bg-stone-50 text-stone-800 border border-stone-300 font-mono text-xs uppercase px-6 py-3 rounded-full shadow-2xs transition-all cursor-pointer"
+              >
+                Request Federal RFQ / RFP Response
+              </button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      {/* Main Government Contracting Section */}
+      <GovernmentContractingSection 
+        openCapabilityModal={openCapabilityModal}
+        openQuoteModal={openQuoteModal}
+      />
+
+      {/* Dedicated Dev Brijosh Crimson CTA Banner */}
+      <div className="py-12 bg-[#0a0a0a]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <DevBrijoshBanner 
+            badgeText="FEDERAL PROCUREMENT DESK"
+            headline="Partner with a SAM.gov Verified Inspection Body"
+            description="Our technical leads are available to review federal statements of work, deliver subcontractor technical quotes, and fulfill prime contractor quality surveillance mandates."
+            primaryButtonText="DOWNLOAD CAPABILITY STATEMENT"
+            secondaryButtonText="CONTACT FEDERAL DESK"
+            onPrimaryClick={openCapabilityModal}
+            onSecondaryClick={openQuoteModal}
+          />
+        </div>
+      </div>
+
+    </div>
+  );
+};

@@ -12,6 +12,11 @@ import {
 } from 'lucide-react';
 import { servicesData } from '../data/servicesData';
 import { PageId } from '../types';
+import { CoreServicesBento } from '../components/sections/CoreServicesBento';
+import { DisciplinesMatrix } from '../components/sections/DisciplinesMatrix';
+import { FeaturesWithPanel } from '../components/sections/FeaturesWithPanel';
+import { DevBrijoshBanner } from '../components/ui/DevBrijoshBanner';
+import { BjorkDecodeText } from '../components/ui/BjorkDecodeText';
 
 interface ServicesPageProps {
   navigateTo: (page: PageId) => void;
@@ -38,12 +43,12 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-3xl space-y-4">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 border border-amber-200 text-amber-800 text-xs font-mono font-bold uppercase tracking-wider">
-              <span>END-TO-END QUALITY VERIFICATION</span>
+              <ShieldCheck className="w-3.5 h-3.5 text-amber-600" />
+              <span>PAGE 02 // END-TO-END QUALITY VERIFICATION</span>
             </div>
 
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight font-sans uppercase text-stone-900">
-              Technical Inspection &amp; <br />
-              <span className="text-amber-700">Quality Services</span>
+              <BjorkDecodeText text="Technical Inspection & Quality Services" />
             </h1>
 
             <p className="text-lg text-stone-600 leading-relaxed font-normal">
@@ -58,95 +63,94 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({
                 <span>Vendor Surveillance Workflow (5 Steps)</span>
                 <ArrowRight className="w-3.5 h-3.5 text-stone-400" />
               </button>
+
               <button
-                onClick={() => openInspectorModal()}
-                className="bg-white hover:bg-stone-50 text-stone-800 border border-stone-300 font-mono text-xs uppercase px-6 py-3 rounded-full shadow-sm transition-all cursor-pointer"
+                onClick={() => openQuoteModal()}
+                className="bg-white hover:bg-stone-50 text-stone-800 border border-stone-300 font-mono text-xs uppercase px-6 py-3 rounded-full shadow-2xs transition-all cursor-pointer"
               >
-                Request an Inspector
+                Request Service Pricing
               </button>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Main Services Explorer: Left Sidebar + Right Interactive Details */}
+      {/* Interactive Service Detail Browser */}
       <div className="py-20 bg-white border-b border-stone-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           
+          <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
+            <span className="text-xs font-mono font-bold text-amber-800 uppercase tracking-widest">
+              SERVICE CATALOG
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-bold text-stone-900 uppercase tracking-tight">
+              Select a Technical Discipline
+            </h2>
+            <p className="text-stone-600 text-sm sm:text-base font-normal">
+              Click through our specialized scopes of work below to review deliverables, covered asset types, and applicable engineering codes.
+            </p>
+          </div>
+
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             
-            {/* Left Nav List (4 Cols) */}
-            <div className="lg:col-span-4 bg-white rounded-2xl border border-stone-200 p-3 shadow-sm space-y-1">
-              <span className="text-[10px] font-mono uppercase font-bold text-stone-500 px-3 py-2 block tracking-wider">
-                10 Core Inspection Services:
+            {/* Left Nav List */}
+            <div className="lg:col-span-4 space-y-2">
+              <span className="text-xs font-mono text-stone-500 uppercase tracking-wider block px-2 mb-2">
+                Available Scopes ({servicesData.length})
               </span>
-
-              {servicesData.map((svc, idx) => {
-                const isSelected = svc.id === selectedServiceId;
-                return (
+              <div className="space-y-1">
+                {servicesData.map((svc) => (
                   <button
                     key={svc.id}
                     onClick={() => setSelectedServiceId(svc.id)}
-                    className={`w-full text-left p-3 rounded-xl transition-all flex items-start gap-3 cursor-pointer ${
-                      isSelected 
-                        ? 'bg-stone-900 text-white shadow-sm font-bold' 
-                        : 'text-stone-700 hover:bg-stone-100 hover:text-stone-950'
+                    className={`w-full text-left p-3.5 rounded-xl text-xs font-mono transition-all flex items-center justify-between cursor-pointer ${
+                      selectedServiceId === svc.id
+                        ? 'bg-stone-900 text-white shadow-sm font-semibold'
+                        : 'bg-stone-50 hover:bg-stone-100 text-stone-700 border border-stone-200/80'
                     }`}
                   >
-                    <span className={`font-mono text-xs font-bold mt-0.5 ${isSelected ? 'text-amber-400' : 'text-stone-500'}`}>
-                      {String(idx + 1).padStart(2, '0')}
-                    </span>
-                    <div className="space-y-0.5">
-                      <div className="text-xs font-bold leading-tight uppercase font-sans">
-                        {svc.title}
-                      </div>
-                      <div className={`text-[10px] font-mono ${isSelected ? 'text-stone-300' : 'text-stone-500'}`}>
-                        {svc.badge}
-                      </div>
-                    </div>
+                    <span className="truncate pr-2">{svc.title}</span>
+                    <ChevronRight className={`w-3.5 h-3.5 shrink-0 ${
+                      selectedServiceId === svc.id ? 'text-amber-400' : 'text-stone-400'
+                    }`} />
                   </button>
-                );
-              })}
+                ))}
+              </div>
             </div>
 
-            {/* Right Detailed Showcase (8 Cols) */}
-            <div className="lg:col-span-8 bg-white rounded-2xl border border-stone-200 shadow-sm p-8 sm:p-10 space-y-8 animate-fade-in">
+            {/* Right Detailed Panel */}
+            <div className="lg:col-span-8 p-6 sm:p-8 rounded-2xl bg-[#FAFAF9] border border-stone-200 space-y-6">
               
-              <div className="relative rounded-2xl overflow-hidden h-64 sm:h-80 border border-stone-200 shadow-inner">
-                <img 
-                  src={activeService.imageUrl} 
-                  alt={activeService.title}
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-stone-950/80 via-stone-950/30 to-transparent flex items-end p-6 sm:p-8">
-                  <div className="space-y-2">
-                    <span className="px-3 py-1 bg-amber-500 text-stone-950 text-xs font-mono font-bold uppercase rounded-md shadow-sm">
-                      {activeService.badge}
-                    </span>
-                    <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight uppercase">
-                      {activeService.title}
-                    </h2>
-                  </div>
+              <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-stone-200">
+                <div>
+                  <span className="text-[11px] font-mono font-bold text-amber-800 uppercase tracking-widest block">
+                    {activeService.badge}
+                  </span>
+                  <h3 className="text-2xl sm:text-3xl font-bold text-stone-900 uppercase tracking-tight mt-1">
+                    {activeService.title}
+                  </h3>
                 </div>
+
+                <button
+                  onClick={() => openInspectorModal({ inspectionDiscipline: activeService.title })}
+                  className="bg-amber-600 hover:bg-amber-500 text-white font-mono text-xs uppercase px-4 py-2 rounded-full flex items-center gap-1.5 shadow-sm active:scale-95 transition-all cursor-pointer font-bold"
+                >
+                  <HardHat className="w-3.5 h-3.5" />
+                  <span>Request Inspector</span>
+                </button>
               </div>
 
-              {/* Full Description */}
-              <div className="space-y-3">
-                <h3 className="text-sm font-bold text-stone-900 font-mono uppercase tracking-wider">
-                  Service Scope &amp; Technical Objectives:
-                </h3>
-                <p className="text-stone-600 text-sm leading-relaxed font-normal">
-                  {activeService.fullDesc}
-                </p>
-              </div>
+              <p className="text-stone-700 text-sm leading-relaxed font-normal">
+                {activeService.fullDesc}
+              </p>
 
-              {/* Deliverables & Hold Points Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-2 font-mono">
-                <div className="p-5 rounded-xl bg-stone-50 border border-stone-200 space-y-3">
-                  <h4 className="text-xs font-bold text-amber-800 uppercase tracking-wider flex items-center gap-1.5">
-                    <CheckCircle2 className="w-4 h-4 text-amber-700" /> Typical Inspection Deliverables:
+              {/* Deliverables & Assets Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2 font-mono">
+                <div className="p-5 rounded-xl bg-white border border-stone-200 space-y-3 shadow-2xs">
+                  <h4 className="text-xs font-bold text-stone-800 uppercase tracking-wider flex items-center gap-1.5">
+                    <FileText className="w-4 h-4 text-amber-600" /> Typical Deliverables:
                   </h4>
-                  <ul className="space-y-2 text-xs text-stone-700">
+                  <ul className="space-y-2 text-xs text-stone-600">
                     {activeService.deliverables.map((deliv, idx) => (
                       <li key={idx} className="flex items-start gap-2">
                         <span className="w-1.5 h-1.5 rounded-full bg-amber-600 mt-1.5 shrink-0" />
@@ -156,11 +160,11 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({
                   </ul>
                 </div>
 
-                <div className="p-5 rounded-xl bg-stone-50 border border-stone-200 space-y-3">
+                <div className="p-5 rounded-xl bg-white border border-stone-200 space-y-3 shadow-2xs">
                   <h4 className="text-xs font-bold text-stone-800 uppercase tracking-wider flex items-center gap-1.5">
                     <ShieldCheck className="w-4 h-4 text-stone-700" /> Equipment &amp; Asset Types:
                   </h4>
-                  <ul className="space-y-2 text-xs text-stone-700">
+                  <ul className="space-y-2 text-xs text-stone-600">
                     {activeService.equipmentCovered.map((eq, idx) => (
                       <li key={idx} className="flex items-start gap-2">
                         <span className="w-1.5 h-1.5 rounded-full bg-stone-400 mt-1.5 shrink-0" />
@@ -178,7 +182,7 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({
                 </span>
                 <div className="flex flex-wrap gap-2">
                   {activeService.standards.map(std => (
-                    <span key={std} className="px-3 py-1 bg-stone-100 rounded-lg text-xs font-mono text-stone-700 font-medium border border-stone-200">
+                    <span key={std} className="px-3 py-1 bg-white rounded-lg text-xs font-mono text-stone-700 font-medium border border-stone-200 shadow-2xs">
                       {std}
                     </span>
                   ))}
@@ -212,6 +216,39 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({
 
           </div>
 
+        </div>
+      </div>
+
+      {/* Core Services Bento */}
+      <CoreServicesBento 
+        navigateTo={navigateTo}
+        openInspectorModal={openInspectorModal}
+      />
+
+      {/* Full Disciplines Matrix */}
+      <DisciplinesMatrix 
+        navigateTo={navigateTo}
+        openInspectorModal={openInspectorModal}
+      />
+
+      {/* Surveillance Protocols with Usage Meter Graphic */}
+      <FeaturesWithPanel 
+        navigateTo={navigateTo}
+        openInspectorModal={openInspectorModal}
+      />
+
+      {/* Dedicated Dev Brijosh Crimson CTA Banner */}
+      <div className="py-12 bg-[#0a0a0a]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <DevBrijoshBanner 
+            badgeText="TECHNICAL SCOPE DISPATCH"
+            headline="Have a Complex Engineering Specification to Fulfill?"
+            description="Our Houston quality managers review client purchase orders and approved Inspection & Test Plans (ITPs) to pair the exact right certified inspector with your assignment."
+            primaryButtonText="SUBMIT TECHNICAL SCOPE"
+            secondaryButtonText="REQUEST RATE SHEET"
+            onPrimaryClick={() => openInspectorModal()}
+            onSecondaryClick={openQuoteModal}
+          />
         </div>
       </div>
 

@@ -9,32 +9,29 @@ import { RequestQuoteModal } from './components/modals/RequestQuoteModal';
 import { CapabilityStatementModal } from './components/modals/CapabilityStatementModal';
 import { InspectorNetworkModal } from './components/modals/InspectorNetworkModal';
 
-// Home Sections
+// Home Landing Page Sections (Streamlined, Punchy, High-Impact)
 import { HeroSection } from './components/sections/HeroSection';
 import { MarketingStats } from './components/sections/MarketingStats';
 import { FunctionsHubSection } from './components/sections/FunctionsHubSection';
 import { FinanceBentoSection } from './components/sections/FinanceBentoSection';
-import { CoreServicesBento } from './components/sections/CoreServicesBento';
-import { FeaturesWithPanel } from './components/sections/FeaturesWithPanel';
 import { HeroLiquidMetalSection } from './components/sections/HeroLiquidMetalSection';
-import { DisciplinesMatrix } from './components/sections/DisciplinesMatrix';
-import { WhyQualispect } from './components/sections/WhyQualispect';
-import { GlobalInteractiveMap } from './components/sections/GlobalInteractiveMap';
-import { FilterableProjects } from './components/sections/FilterableProjects';
-import { QualitySystemSection } from './components/sections/QualitySystemSection';
-import { GovernmentContractingSection } from './components/sections/GovernmentContractingSection';
-import { CareersSection } from './components/sections/CareersSection';
+import { HomeExploreStrip } from './components/sections/HomeExploreStrip';
 import { GradientBlindsCTABanner } from './components/sections/GradientBlindsCTABanner';
-import { ContactSection } from './components/sections/ContactSection';
 
 // Dedicated Sub-Pages
 import { AboutPage } from './pages/AboutPage';
 import { ServicesPage } from './pages/ServicesPage';
 import { VendorSurveillancePage } from './pages/VendorSurveillancePage';
 import { IndustriesPage } from './pages/IndustriesPage';
+import { GlobalCoveragePage } from './pages/GlobalCoveragePage';
+import { ProjectsPage } from './pages/ProjectsPage';
+import { QualityPage } from './pages/QualityPage';
+import { GovernmentContractingPage } from './pages/GovernmentContractingPage';
+import { CareersPage } from './pages/CareersPage';
+import { ContactPage } from './pages/ContactPage';
 
-// Floating Speed Dial Icons
-import { Phone, MessageSquare, HardHat, FileText, ChevronUp } from 'lucide-react';
+// Floating UI Icons
+import { ChevronUp } from 'lucide-react';
 
 export function App() {
   const [currentPage, setCurrentPage] = useState<PageId>('home');
@@ -121,74 +118,61 @@ export function App() {
 
       {/* Main Page Rendering */}
       <main className="flex-grow">
+        {/* ======================================================== */}
+        {/* 1. STREAMLINED HOME LANDING PAGE                        */}
+        {/* ======================================================== */}
         {currentPage === 'home' && (
           <>
+            {/* 1. Hero with Sapphire GlassFold & Isaiah Bjork badges */}
             <HeroSection 
               navigateTo={navigateTo}
               openInspectorModal={openInspectorModal}
               openQuoteModal={openQuoteModal}
             />
+
+            {/* 2. Key Metrics + Aadil Ghani Webhook Relay Graphic */}
             <MarketingStats 
               navigateTo={navigateTo}
               openInspectorModal={openInspectorModal}
               openQuoteModal={openQuoteModal}
             />
+
+            {/* 3. Lucas Markes 8-Node Hub + Aadil Ghani Deploy Pipeline */}
             <FunctionsHubSection 
               navigateTo={navigateTo}
               openInspectorModal={openInspectorModal}
             />
+
+            {/* 4. Roman Vasnev Finance Bento (Industrial Speed & Quality) */}
             <FinanceBentoSection 
               navigateTo={navigateTo}
               openInspectorModal={openInspectorModal}
             />
-            <CoreServicesBento 
-              navigateTo={navigateTo}
-              openInspectorModal={openInspectorModal}
-            />
-            <FeaturesWithPanel 
-              navigateTo={navigateTo}
-              openInspectorModal={openInspectorModal}
-            />
+
+            {/* 5. Liquid Metal Metallurgy & Testing Rigor Terminal */}
             <HeroLiquidMetalSection 
               navigateTo={navigateTo}
               openInspectorModal={openInspectorModal}
               openQuoteModal={openQuoteModal}
             />
-            <DisciplinesMatrix 
+
+            {/* 6. Executive Portals Strip (Coverage, Projects, Quality, Government) */}
+            <HomeExploreStrip 
               navigateTo={navigateTo}
-              openInspectorModal={openInspectorModal}
             />
-            <WhyQualispect 
-              openInspectorModal={openInspectorModal}
-              openQuoteModal={openQuoteModal}
-            />
-            <GlobalInteractiveMap 
-              openInspectorModal={openInspectorModal}
-            />
-            <FilterableProjects 
-              openInspectorModal={openInspectorModal}
-            />
-            <QualitySystemSection 
-              openInspectorModal={openInspectorModal}
-            />
-            <GovernmentContractingSection 
-              openCapabilityModal={openCapabilityModal}
-              openQuoteModal={openQuoteModal}
-            />
-            <CareersSection 
-              openInspectorNetworkModal={openInspectorNetworkModal}
-            />
+
+            {/* 7. Dev Brijosh Crimson WebGL Blinds Final CTA Banner */}
             <GradientBlindsCTABanner 
               navigateTo={navigateTo}
               openInspectorModal={openInspectorModal}
               openQuoteModal={openQuoteModal}
             />
-            <ContactSection 
-              openInspectorModal={openInspectorModal}
-            />
           </>
         )}
 
+        {/* ======================================================== */}
+        {/* 2. DEDICATED SUB-PAGES                                  */}
+        {/* ======================================================== */}
         {currentPage === 'about' && (
           <AboutPage 
             navigateTo={navigateTo}
@@ -221,42 +205,50 @@ export function App() {
         )}
 
         {currentPage === 'global-coverage' && (
-          <div className="bg-white pt-24 sm:pt-28">
-            <GlobalInteractiveMap openInspectorModal={openInspectorModal} />
-          </div>
+          <GlobalCoveragePage 
+            navigateTo={navigateTo}
+            openInspectorModal={openInspectorModal}
+            openQuoteModal={openQuoteModal}
+          />
         )}
 
         {currentPage === 'projects' && (
-          <div className="bg-white pt-24 sm:pt-28">
-            <FilterableProjects openInspectorModal={openInspectorModal} />
-          </div>
+          <ProjectsPage 
+            navigateTo={navigateTo}
+            openInspectorModal={openInspectorModal}
+            openQuoteModal={openQuoteModal}
+          />
         )}
 
         {currentPage === 'quality' && (
-          <div className="bg-white pt-24 sm:pt-28">
-            <QualitySystemSection openInspectorModal={openInspectorModal} />
-          </div>
+          <QualityPage 
+            navigateTo={navigateTo}
+            openInspectorModal={openInspectorModal}
+            openQuoteModal={openQuoteModal}
+          />
         )}
 
         {currentPage === 'government-contracting' && (
-          <div className="bg-white pt-24 sm:pt-28">
-            <GovernmentContractingSection 
-              openCapabilityModal={openCapabilityModal}
-              openQuoteModal={openQuoteModal}
-            />
-          </div>
+          <GovernmentContractingPage 
+            navigateTo={navigateTo}
+            openCapabilityModal={openCapabilityModal}
+            openQuoteModal={openQuoteModal}
+          />
         )}
 
         {currentPage === 'careers' && (
-          <div className="bg-white pt-24 sm:pt-28">
-            <CareersSection openInspectorNetworkModal={openInspectorNetworkModal} />
-          </div>
+          <CareersPage 
+            navigateTo={navigateTo}
+            openInspectorNetworkModal={openInspectorNetworkModal}
+          />
         )}
 
         {currentPage === 'contact' && (
-          <div className="bg-white pt-24 sm:pt-28">
-            <ContactSection openInspectorModal={openInspectorModal} />
-          </div>
+          <ContactPage 
+            navigateTo={navigateTo}
+            openInspectorModal={openInspectorModal}
+            openQuoteModal={openQuoteModal}
+          />
         )}
 
         {currentPage === 'request-inspector' && (
@@ -267,28 +259,15 @@ export function App() {
         )}
 
         {currentPage === 'request-quote' && (
-          <div className="bg-white py-16">
-            <div className="max-w-3xl mx-auto px-4">
-              <div className="text-center mb-8">
-                <h1 className="text-3xl font-black uppercase tracking-tight text-industrial-950">
-                  Request a Formal Inspection Quotation (RFQ)
-                </h1>
-                <p className="text-sm text-steel-600 mt-2">
-                  Complete the quick RFQ form or call our Houston office directly at 281-764-6224.
-                </p>
-              </div>
-              <button
-                onClick={() => openQuoteModal()}
-                className="w-full py-4 bg-safety-500 hover:bg-safety-600 text-white font-bold text-sm uppercase rounded-xl shadow-lg"
-              >
-                Launch RFQ Modal Form
-              </button>
-            </div>
-          </div>
+          <ContactPage 
+            navigateTo={navigateTo}
+            openInspectorModal={openInspectorModal}
+            openQuoteModal={openQuoteModal}
+          />
         )}
       </main>
 
-      {/* Footer */}
+      {/* 21st.dev Kedhareswer Naidu: Light Beam Footer with Giant Wordmark */}
       <Footer 
         setCurrentPage={navigateTo}
         openInspectorModal={openInspectorModal}
