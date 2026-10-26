@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useLayoutEffect, useMemo } from 'react';
+import { ChevronDown } from 'lucide-react';
 import { PageId } from '../types';
 import { Logo } from './Logo';
 
@@ -454,17 +455,81 @@ const BWF_STYLES = `
 @container (max-width: 860px) {
   .bwf-inner {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    row-gap: 40px;
+    row-gap: 36px;
   }
   .bwf-col:nth-child(1) {
     grid-column: 1 / -1;
     max-width: none;
   }
 }
-@container (max-width: 520px) {
+@container (max-width: 640px) {
   .bwf-inner {
     grid-template-columns: minmax(0, 1fr);
-    row-gap: 36px;
+    row-gap: 14px;
+    padding: 24px 16px 0;
+  }
+  .bwf-col:nth-child(1) {
+    margin-bottom: 6px;
+  }
+  .bwf-label {
+    padding-bottom: 10px;
+    margin-bottom: 0;
+  }
+  .bwf-col:nth-child(1) p.bwf-fade {
+    font-size: 12.5px;
+    line-height: 1.45;
+  }
+  .bwf-socials {
+    margin-top: 10px;
+    gap: 8px;
+  }
+  .bwf-soc {
+    width: 28px;
+    height: 28px;
+  }
+  .bwf-soc svg {
+    width: 14px;
+    height: 14px;
+  }
+  .bwf-credits {
+    margin-top: 12px;
+    font-size: 11px;
+    line-height: 1.4;
+  }
+  .bwf-credits p + p {
+    margin-top: 2px;
+  }
+  .bwf-col-content {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .bwf-col-content.is-open {
+    grid-template-rows: 1fr;
+  }
+  .bwf-col-content-inner {
+    overflow: hidden;
+  }
+  .bwf-links {
+    margin-top: 8px;
+    margin-bottom: 6px;
+  }
+  .bwf-link {
+    padding: 5px 0;
+    font-size: 13px;
+    line-height: 18px;
+  }
+  .bwf-word {
+    margin-top: 18px;
+  }
+}
+@media (min-width: 641px) {
+  .bwf-col-content {
+    display: block !important;
+    grid-template-rows: none !important;
+  }
+  .bwf-col-content-inner {
+    overflow: visible !important;
   }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -666,6 +731,14 @@ export const Footer: React.FC<FooterProps> = ({
   const [hasEntered, setHasEntered] = useState(false);
   const [isInView, setIsInView] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
+  const [openMobileColumns, setOpenMobileColumns] = useState<Record<string, boolean>>({});
+
+  const toggleMobileCol = (title: string) => {
+    setOpenMobileColumns((prev) => ({
+      ...prev,
+      [title]: !prev[title],
+    }));
+  };
 
   const cursorRef = useRef({ u: 0.5, x: 0, y: 0, inside: false });
 
@@ -951,30 +1024,49 @@ export const Footer: React.FC<FooterProps> = ({
         </div>
 
         {/* Navigation Link Columns */}
-        {columns.map((col, colIdx) => (
-          <nav key={col.title + colIdx} className="bwf-col" aria-label={col.title}>
-            <p className="bwf-label" style={getNextDelay()}>
-              {col.title}
-            </p>
-            <ul className="bwf-links">
-              {col.links.map((link, linkIdx) => (
-                <li key={link.label + linkIdx} className="bwf-fade" style={getNextDelay()}>
-                  {link.onClick ? (
-                    <button type="button" className="bwf-link" onClick={link.onClick}>
-                      <span className="bwf-link-t">{link.label}</span>
-                      <ArrowIcon />
-                    </button>
-                  ) : (
-                    <a className="bwf-link" href={link.href || '#'}>
-                      <span className="bwf-link-t">{link.label}</span>
-                      <ArrowIcon />
-                    </a>
-                  )}
-                </li>
-              ))}
-            </ul>
-          </nav>
-        ))}
+        {columns.map((col, colIdx) => {
+          const isOpen = !!openMobileColumns[col.title];
+          return (
+            <nav key={col.title + colIdx} className="bwf-col" aria-label={col.title}>
+              <button
+                type="button"
+                onClick={() => toggleMobileCol(col.title)}
+                className="bwf-label w-full flex items-center justify-between sm:pointer-events-none cursor-pointer sm:cursor-default"
+                style={getNextDelay()}
+                aria-expanded={isOpen}
+              >
+                <span>{col.title}</span>
+                <ChevronDown 
+                  className={`w-3.5 h-3.5 text-stone-400 sm:hidden transition-transform duration-200 ${
+                    isOpen ? 'rotate-180 text-white' : ''
+                  }`} 
+                />
+              </button>
+
+              <div className={`bwf-col-content ${isOpen ? 'is-open' : ''}`}>
+                <div className="bwf-col-content-inner">
+                  <ul className="bwf-links">
+                    {col.links.map((link, linkIdx) => (
+                      <li key={link.label + linkIdx} className="bwf-fade" style={getNextDelay()}>
+                        {link.onClick ? (
+                          <button type="button" className="bwf-link" onClick={link.onClick}>
+                            <span className="bwf-link-t">{link.label}</span>
+                            <ArrowIcon />
+                          </button>
+                        ) : (
+                          <a className="bwf-link" href={link.href || '#'}>
+                            <span className="bwf-link-t">{link.label}</span>
+                            <ArrowIcon />
+                          </a>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </nav>
+          );
+        })}
       </div>
 
       {/* 21ST.DEV Kedhareswer Naidu: Giant Animated Wordmark with Dynamic Continuous Illumination */}
