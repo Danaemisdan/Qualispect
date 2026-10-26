@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef, useLayoutEffect, useMemo } from 'react';
-import { ChevronDown } from 'lucide-react';
 import { PageId } from '../types';
 import { Logo } from './Logo';
 
@@ -20,19 +19,6 @@ interface LinkItem {
   label: string;
   href?: string;
   onClick?: () => void;
-}
-
-interface ColumnItem {
-  title: string;
-  links: LinkItem[];
-}
-
-interface CreditItem {
-  lead: string;
-  label?: string;
-  href?: string;
-  onClick?: () => void;
-  tail?: string;
 }
 
 const BWF_STYLES = `
@@ -178,7 +164,7 @@ const BWF_STYLES = `
   line-height: 1;
   letter-spacing: 0.05em;
   color: rgb(var(--bwf-acc));
-  padding-bottom: 13px;
+  padding-bottom: 12px;
   position: relative;
   display: block;
   text-transform: uppercase;
@@ -277,8 +263,8 @@ const BWF_STYLES = `
   translate: -50% 0;
 }
 .bwf-credits {
-  margin-top: 22px;
-  font-size: 13px;
+  margin-top: 20px;
+  font-size: 12.5px;
   line-height: 1.6;
   color: var(--bwf-muted);
 }
@@ -422,8 +408,7 @@ const BWF_STYLES = `
       rgba(var(--bwf-lit), 0.55) calc(var(--bwf-b) - 1.5%),
       rgba(var(--bwf-lit), 0.7) var(--bwf-b),
       rgba(var(--bwf-lit), 0.2) calc(var(--bwf-b) + 3.5%),
-      transparent calc(var(--bwf-b) + 8%)
-    ),
+      transparent calc(var(--bwf-b) + 8%)),
     linear-gradient(180deg, var(--bwf-wt) var(--bwf-top), var(--bwf-wf) var(--bwf-bot));
   transition: transform 0.5s cubic-bezier(0.2, 0.9, 0.25, 1.2), filter 0.4s;
   transform-origin: 50% 100%;
@@ -452,7 +437,71 @@ const BWF_STYLES = `
   pointer-events: none;
   background: linear-gradient(180deg, transparent, rgba(var(--bwf-bg-rgb), 0.55) 55%, var(--bwf-bg));
 }
-@container (max-width: 860px) {
+
+/* ======================================================== */
+/* LUXURY RESPONSIVE BEHAVIOR                               */
+/* ======================================================== */
+
+/* Desktop view: Hide mobile 2x2 grid, show desktop columns */
+@media (min-width: 641px) {
+  .bwf-mobile-grid {
+    display: none !important;
+  }
+}
+
+/* Mobile view: Clean 2x2 Quadrant Grid (No broken accordions) */
+@media (max-width: 640px) {
+  .bwf-inner {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 20px !important;
+    padding: 24px 20px 0 !important;
+  }
+  .bwf-desktop-columns {
+    display: none !important;
+  }
+  .bwf-desktop-credits {
+    display: none !important;
+  }
+  .bwf-mobile-grid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    column-gap: 20px !important;
+    row-gap: 20px !important;
+    width: 100% !important;
+  }
+  .bwf-mobile-col {
+    min-width: 0;
+  }
+  .bwf-label {
+    font-size: 11px !important;
+    padding-bottom: 7px !important;
+    letter-spacing: 0.08em !important;
+  }
+  .bwf-links {
+    margin-top: 8px !important;
+    gap: 1px !important;
+  }
+  .bwf-link {
+    padding: 3.5px 0 !important;
+    font-size: 12.5px !important;
+    line-height: 18px !important;
+    color: rgba(var(--bwf-ink-rgb), 0.72) !important;
+  }
+  .bwf-word {
+    margin-top: 24px !important;
+  }
+  .bwf-soc {
+    width: 30px !important;
+    height: 30px !important;
+  }
+  .bwf-soc svg {
+    width: 14px !important;
+    height: 14px !important;
+  }
+}
+
+@container (max-width: 860px) and (min-width: 641px) {
   .bwf-inner {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     row-gap: 36px;
@@ -460,76 +509,6 @@ const BWF_STYLES = `
   .bwf-col:nth-child(1) {
     grid-column: 1 / -1;
     max-width: none;
-  }
-}
-@container (max-width: 640px) {
-  .bwf-inner {
-    grid-template-columns: minmax(0, 1fr);
-    row-gap: 14px;
-    padding: 24px 16px 0;
-  }
-  .bwf-col:nth-child(1) {
-    margin-bottom: 6px;
-  }
-  .bwf-label {
-    padding-bottom: 10px;
-    margin-bottom: 0;
-  }
-  .bwf-col:nth-child(1) p.bwf-fade {
-    font-size: 12.5px;
-    line-height: 1.45;
-  }
-  .bwf-socials {
-    margin-top: 10px;
-    gap: 8px;
-  }
-  .bwf-soc {
-    width: 28px;
-    height: 28px;
-  }
-  .bwf-soc svg {
-    width: 14px;
-    height: 14px;
-  }
-  .bwf-credits {
-    margin-top: 12px;
-    font-size: 11px;
-    line-height: 1.4;
-  }
-  .bwf-credits p + p {
-    margin-top: 2px;
-  }
-  .bwf-col-content {
-    display: grid;
-    grid-template-rows: 0fr;
-    transition: grid-template-rows 0.28s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  .bwf-col-content.is-open {
-    grid-template-rows: 1fr;
-  }
-  .bwf-col-content-inner {
-    overflow: hidden;
-  }
-  .bwf-links {
-    margin-top: 8px;
-    margin-bottom: 6px;
-  }
-  .bwf-link {
-    padding: 5px 0;
-    font-size: 13px;
-    line-height: 18px;
-  }
-  .bwf-word {
-    margin-top: 18px;
-  }
-}
-@media (min-width: 641px) {
-  .bwf-col-content {
-    display: block !important;
-    grid-template-rows: none !important;
-  }
-  .bwf-col-content-inner {
-    overflow: visible !important;
   }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -678,46 +657,34 @@ export const Footer: React.FC<FooterProps> = ({
     { label: 'Houston, TX HQ', href: '#hq', icon: 'mapPin' },
   ];
 
-  const columns: ColumnItem[] = [
-    {
-      title: 'Services',
-      links: [
-        { label: 'Vendor Surveillance', onClick: () => navigateTo('vendor-surveillance') },
-        { label: 'Third-Party QA/QC', onClick: () => navigateTo('services') },
-        { label: 'Welding & CWI', onClick: () => navigateTo('services') },
-        { label: 'Hydrostatic FAT', onClick: () => navigateTo('services') },
-        { label: 'Rotating Equipment', onClick: () => navigateTo('services') },
-        { label: 'Field Expediting', onClick: () => navigateTo('services') },
-      ],
-    },
-    {
-      title: 'Company',
-      links: [
-        { label: 'About Qualispect', onClick: () => navigateTo('about') },
-        { label: '45+ Countries Hub', onClick: () => navigateTo('global-coverage') },
-        { label: 'Industries We Support', onClick: () => navigateTo('industries') },
-        { label: 'Project Experience Matrix', onClick: () => navigateTo('projects') },
-        { label: 'Quality System', onClick: () => navigateTo('quality') },
-        { label: 'Careers & Inspector Network', onClick: () => navigateTo('careers') },
-      ],
-    },
-    {
-      title: 'Government & Dispatch',
-      links: [
-        { label: 'Federal Contracting Desk', onClick: () => navigateTo('government-contracting') },
-        { label: 'Download Capability Sheet', onClick: openCapabilityModal },
-        { label: 'Request Inspector Mobilization', onClick: openInspectorModal },
-        { label: 'Request RFQ / Pricing', onClick: openQuoteModal },
-        { label: 'Contact Houston HQ', onClick: () => navigateTo('contact') },
-        { label: 'Privacy & Terms of Service', onClick: () => navigateTo('contact') },
-      ],
-    },
+  const servicesLinks: LinkItem[] = [
+    { label: 'Vendor Surveillance', onClick: () => navigateTo('vendor-surveillance') },
+    { label: 'Third-Party QA/QC', onClick: () => navigateTo('services') },
+    { label: 'Welding & CWI', onClick: () => navigateTo('services') },
+    { label: 'Hydrostatic FAT', onClick: () => navigateTo('services') },
+    { label: 'Rotating Equipment', onClick: () => navigateTo('services') },
+    { label: 'Field Expediting', onClick: () => navigateTo('services') },
   ];
 
-  const credits: CreditItem[] = [
-    { lead: 'Headquarters: ', label: '9801 Westheimer Rd, Suite 300, Houston, TX 77042' },
-    { lead: 'Federal Contracting: ', label: 'CAGE: 7S2L7  •  UEI: L3C9LLNA2KJ9  •  SAM.gov Verified' },
-    { lead: 'Quality Framework: ', label: 'Independent Technical Surveillance Aligned with ISO 17020' },
+  const companyLinks: LinkItem[] = [
+    { label: 'About Qualispect', onClick: () => navigateTo('about') },
+    { label: '45+ Countries Hub', onClick: () => navigateTo('global-coverage') },
+    { label: 'Industries We Support', onClick: () => navigateTo('industries') },
+    { label: 'Project Matrix', onClick: () => navigateTo('projects') },
+    { label: 'Quality System', onClick: () => navigateTo('quality') },
+    { label: 'Careers & Network', onClick: () => navigateTo('careers') },
+  ];
+
+  const governmentLinks: LinkItem[] = [
+    { label: 'Federal Contracting Desk', onClick: () => navigateTo('government-contracting') },
+    { label: 'Capability Sheet (PDF)', onClick: openCapabilityModal },
+    { label: 'SAM.gov Verified (CAGE: 7S2L7)', onClick: () => navigateTo('government-contracting') },
+  ];
+
+  const dispatchLinks: LinkItem[] = [
+    { label: 'Request Inspector', onClick: openInspectorModal },
+    { label: 'Request Technical RFQ', onClick: openQuoteModal },
+    { label: 'Contact Houston HQ', onClick: () => navigateTo('contact') },
   ];
 
   const letters = useMemo(() => Array.from(wordmark), [wordmark]);
@@ -731,14 +698,6 @@ export const Footer: React.FC<FooterProps> = ({
   const [hasEntered, setHasEntered] = useState(false);
   const [isInView, setIsInView] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
-  const [openMobileColumns, setOpenMobileColumns] = useState<Record<string, boolean>>({});
-
-  const toggleMobileCol = (title: string) => {
-    setOpenMobileColumns((prev) => ({
-      ...prev,
-      [title]: !prev[title],
-    }));
-  };
 
   const cursorRef = useRef({ u: 0.5, x: 0, y: 0, inside: false });
 
@@ -1007,66 +966,177 @@ export const Footer: React.FC<FooterProps> = ({
             ))}
           </ul>
 
-          {/* Credits & Credentials Row */}
-          <div className="bwf-credits">
-            {credits.map((cr, idx) => (
-              <p key={idx} className="bwf-fade" style={getNextDelay()}>
-                {cr.lead}
-                {cr.onClick ? (
-                  <a onClick={cr.onClick}>{cr.label}</a>
-                ) : (
-                  <b>{cr.label}</b>
-                )}
-                {cr.tail}
-              </p>
-            ))}
+          {/* Desktop Only: Credits & Credentials Block */}
+          <div className="bwf-credits bwf-desktop-credits">
+            <p className="bwf-fade" style={getNextDelay()}>
+              Headquarters: <b>9801 Westheimer Rd, Suite 300, Houston, TX 77042</b>
+            </p>
+            <p className="bwf-fade" style={getNextDelay()}>
+              Federal Contracting: <b>CAGE: 7S2L7 • UEI: L3C9LLNA2KJ9 • SAM.gov Verified</b>
+            </p>
+            <p className="bwf-fade" style={getNextDelay()}>
+              Quality Framework: <b>Independent Technical Surveillance Aligned with ISO 17020</b>
+            </p>
           </div>
         </div>
 
-        {/* Navigation Link Columns */}
-        {columns.map((col, colIdx) => {
-          const isOpen = !!openMobileColumns[col.title];
-          return (
-            <nav key={col.title + colIdx} className="bwf-col" aria-label={col.title}>
-              <button
-                type="button"
-                onClick={() => toggleMobileCol(col.title)}
-                className="bwf-label w-full flex items-center justify-between sm:pointer-events-none cursor-pointer sm:cursor-default"
-                style={getNextDelay()}
-                aria-expanded={isOpen}
-              >
-                <span>{col.title}</span>
-                <ChevronDown 
-                  className={`w-3.5 h-3.5 text-stone-400 sm:hidden transition-transform duration-200 ${
-                    isOpen ? 'rotate-180 text-white' : ''
-                  }`} 
-                />
-              </button>
+        {/* ======================================================== */}
+        {/* DESKTOP 3-COLUMN NAVIGATION LINKS (> 640px)              */}
+        {/* ======================================================== */}
+        <div className="bwf-desktop-columns contents">
+          {/* Col 2: Services */}
+          <nav className="bwf-col" aria-label="Services">
+            <p className="bwf-label" style={getNextDelay()}>
+              Services
+            </p>
+            <ul className="bwf-links">
+              {servicesLinks.map((link, idx) => (
+                <li key={link.label + idx} className="bwf-fade" style={getNextDelay()}>
+                  {link.onClick ? (
+                    <button type="button" className="bwf-link" onClick={link.onClick}>
+                      <span className="bwf-link-t">{link.label}</span>
+                      <ArrowIcon />
+                    </button>
+                  ) : (
+                    <a className="bwf-link" href={link.href || '#'}>
+                      <span className="bwf-link-t">{link.label}</span>
+                      <ArrowIcon />
+                    </a>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </nav>
 
-              <div className={`bwf-col-content ${isOpen ? 'is-open' : ''}`}>
-                <div className="bwf-col-content-inner">
-                  <ul className="bwf-links">
-                    {col.links.map((link, linkIdx) => (
-                      <li key={link.label + linkIdx} className="bwf-fade" style={getNextDelay()}>
-                        {link.onClick ? (
-                          <button type="button" className="bwf-link" onClick={link.onClick}>
-                            <span className="bwf-link-t">{link.label}</span>
-                            <ArrowIcon />
-                          </button>
-                        ) : (
-                          <a className="bwf-link" href={link.href || '#'}>
-                            <span className="bwf-link-t">{link.label}</span>
-                            <ArrowIcon />
-                          </a>
-                        )}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            </nav>
-          );
-        })}
+          {/* Col 3: Company */}
+          <nav className="bwf-col" aria-label="Company">
+            <p className="bwf-label" style={getNextDelay()}>
+              Company
+            </p>
+            <ul className="bwf-links">
+              {companyLinks.map((link, idx) => (
+                <li key={link.label + idx} className="bwf-fade" style={getNextDelay()}>
+                  {link.onClick ? (
+                    <button type="button" className="bwf-link" onClick={link.onClick}>
+                      <span className="bwf-link-t">{link.label}</span>
+                      <ArrowIcon />
+                    </button>
+                  ) : (
+                    <a className="bwf-link" href={link.href || '#'}>
+                      <span className="bwf-link-t">{link.label}</span>
+                      <ArrowIcon />
+                    </a>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </nav>
+
+          {/* Col 4: Government & Dispatch */}
+          <nav className="bwf-col" aria-label="Government & Dispatch">
+            <p className="bwf-label" style={getNextDelay()}>
+              Government &amp; Dispatch
+            </p>
+            <ul className="bwf-links">
+              {[...governmentLinks, ...dispatchLinks].map((link, idx) => (
+                <li key={link.label + idx} className="bwf-fade" style={getNextDelay()}>
+                  {link.onClick ? (
+                    <button type="button" className="bwf-link" onClick={link.onClick}>
+                      <span className="bwf-link-t">{link.label}</span>
+                      <ArrowIcon />
+                    </button>
+                  ) : (
+                    <a className="bwf-link" href={link.href || '#'}>
+                      <span className="bwf-link-t">{link.label}</span>
+                      <ArrowIcon />
+                    </a>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </div>
+
+        {/* ======================================================== */}
+        {/* MOBILE 2x2 LUXURY BALANCED GRID (<= 640px)               */}
+        {/* ======================================================== */}
+        <div className="bwf-mobile-grid">
+          {/* Quadrant 1: Services */}
+          <nav className="bwf-mobile-col" aria-label="Services">
+            <p className="bwf-label">Services</p>
+            <ul className="bwf-links">
+              {servicesLinks.map((link, idx) => (
+                <li key={link.label + idx}>
+                  <button type="button" className="bwf-link" onClick={link.onClick}>
+                    <span className="bwf-link-t">{link.label}</span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
+          {/* Quadrant 2: Company */}
+          <nav className="bwf-mobile-col" aria-label="Company">
+            <p className="bwf-label">Company</p>
+            <ul className="bwf-links">
+              {companyLinks.map((link, idx) => (
+                <li key={link.label + idx}>
+                  <button type="button" className="bwf-link" onClick={link.onClick}>
+                    <span className="bwf-link-t">{link.label}</span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
+          {/* Quadrant 3: Federal Desk */}
+          <nav className="bwf-mobile-col" aria-label="Federal Desk">
+            <p className="bwf-label">Federal Desk</p>
+            <ul className="bwf-links">
+              {governmentLinks.map((link, idx) => (
+                <li key={link.label + idx}>
+                  <button type="button" className="bwf-link" onClick={link.onClick}>
+                    <span className="bwf-link-t">{link.label}</span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
+          {/* Quadrant 4: Rapid Dispatch */}
+          <nav className="bwf-mobile-col" aria-label="Dispatch">
+            <p className="bwf-label">Dispatch</p>
+            <ul className="bwf-links">
+              {dispatchLinks.map((link, idx) => (
+                <li key={link.label + idx}>
+                  <button type="button" className="bwf-link" onClick={link.onClick}>
+                    <span className="bwf-link-t text-amber-300 font-medium">{link.label}</span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </div>
+
+      </div>
+
+      {/* High-End Metadata Compliance Strip (Visible on all viewports) */}
+      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 pt-8 mt-6 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-slate-400">
+        <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-3 gap-y-1 text-center sm:text-left text-[11px]">
+          <span>Houston Global HQ</span>
+          <span className="text-slate-700 hidden sm:inline">•</span>
+          <span>CAGE: 7S2L7</span>
+          <span className="text-slate-700 hidden sm:inline">•</span>
+          <span>UEI: L3C9LLNA2KJ9</span>
+          <span className="text-slate-700 hidden sm:inline">•</span>
+          <span className="text-emerald-400 font-semibold">SAM.gov Verified</span>
+          <span className="text-slate-700 hidden sm:inline">•</span>
+          <span className="text-sky-400 font-semibold">ISO 17020 Aligned</span>
+        </div>
+
+        <p className="text-[11px] text-slate-500 text-center sm:text-right">
+          © {year} {company} All Rights Reserved.
+        </p>
       </div>
 
       {/* 21ST.DEV Kedhareswer Naidu: Giant Animated Wordmark with Dynamic Continuous Illumination */}
