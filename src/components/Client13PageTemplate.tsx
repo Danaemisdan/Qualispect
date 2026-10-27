@@ -7,19 +7,9 @@ import {
   X, 
   CheckCircle2, 
   ShieldCheck, 
-  Clock, 
   FileText, 
-  Building2, 
-  MapPin, 
-  Phone, 
-  Mail, 
-  Download,
   Send,
   UploadCloud,
-  FileCheck2,
-  Globe2,
-  Award,
-  Layers,
   ArrowRight
 } from 'lucide-react';
 
@@ -83,9 +73,9 @@ export const Client13PageTemplate: React.FC<Client13PageTemplateProps> = ({
     <div className="min-h-screen bg-[#F4F7FA] text-slate-800 font-sans">
       
       {/* ======================================================== */}
-      {/* 1. HERO BANNER — Deep Industrial Navy (#08253E)          */}
+      {/* 1. EXPANDED MONUMENTAL HERO BANNER (#08253E)             */}
       {/* ======================================================== */}
-      <section className="relative bg-[#08253E] text-white pt-16 sm:pt-20 pb-16 sm:pb-24 overflow-hidden border-b border-[#0D3B62]">
+      <section className="relative bg-[#08253E] text-white pt-24 sm:pt-32 lg:pt-44 pb-24 sm:pb-32 lg:pb-44 min-h-[500px] lg:min-h-[580px] flex flex-col justify-center overflow-hidden border-b border-[#0D3B62]">
         
         {/* Subtle Industrial Grid Pattern */}
         <div 
@@ -96,32 +86,32 @@ export const Client13PageTemplate: React.FC<Client13PageTemplateProps> = ({
           }} 
         />
         
-        {/* Ambient Top Glow */}
-        <div className="absolute top-0 right-1/4 w-96 h-96 bg-sky-500/10 rounded-full blur-3xl pointer-events-none" />
+        {/* Ambient Glow */}
+        <div className="absolute top-0 right-1/4 w-[600px] h-[600px] bg-sky-500/10 rounded-full blur-3xl pointer-events-none" />
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 sm:space-y-8 text-left">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-7 sm:space-y-9 text-left">
           
           {/* Eyebrow Pill */}
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.08] border border-white/15 text-amber-400 text-xs font-mono font-bold tracking-wider uppercase">
-            <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+          <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white/10 border border-white/20 text-amber-400 text-xs sm:text-sm font-sans font-extrabold tracking-[0.2em] uppercase">
+            <span className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse shrink-0" />
             <span>{pageData.eyebrow}</span>
           </div>
 
-          {/* Monumental Headline */}
-          <h1 className="text-3xl sm:text-5xl lg:text-[56px] font-extrabold tracking-tight leading-[1.12] text-white max-w-5xl">
+          {/* Monumental Headline (Bigger, Bolder, Sans-Serif strictly matching mockups) */}
+          <h1 className="text-4xl sm:text-6xl lg:text-[70px] xl:text-[76px] font-black uppercase tracking-[-0.03em] leading-[1.08] text-white max-w-5xl">
             {pageData.heroHeadline}
           </h1>
 
-          {/* Meaningful Subtitle */}
-          <p className="text-sm sm:text-base lg:text-lg text-slate-300 font-normal max-w-3xl leading-relaxed">
+          {/* Expanded Subtitle */}
+          <p className="text-base sm:text-xl lg:text-2xl text-slate-200 font-medium max-w-4xl leading-relaxed">
             {pageData.heroSubtitle}
           </p>
 
-          {/* CTA Buttons Row */}
-          <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+          {/* Prominent Action Buttons Row */}
+          <div className="pt-3 flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
             <button
               onClick={() => openInspectorModal()}
-              className="inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-lg bg-[#F97316] hover:bg-[#EA580C] text-white font-bold text-xs uppercase tracking-wider shadow-lg shadow-orange-950/30 transition-all duration-150 cursor-pointer active:scale-[0.98]"
+              className="inline-flex items-center justify-center gap-3 px-8 sm:px-9 py-4 rounded-xl bg-[#F97316] hover:bg-[#EA580C] text-white font-extrabold text-sm uppercase tracking-wider shadow-xl shadow-orange-950/40 transition-all duration-150 cursor-pointer active:scale-[0.98]"
             >
               <HardHat className="w-4 h-4 text-white" />
               <span>{pageData.ctaText}</span>
@@ -130,7 +120,7 @@ export const Client13PageTemplate: React.FC<Client13PageTemplateProps> = ({
 
             <button
               onClick={() => openQuoteModal()}
-              className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg bg-white/10 hover:bg-white/15 text-white font-semibold text-xs uppercase tracking-wider border border-white/20 transition-all cursor-pointer"
+              className="inline-flex items-center justify-center gap-2.5 px-7 py-4 rounded-xl bg-white/10 hover:bg-white/15 text-white font-bold text-sm uppercase tracking-wider border border-white/20 transition-all cursor-pointer backdrop-blur-sm"
             >
               <FileText className="w-4 h-4 text-sky-300" />
               <span>REQUEST A QUOTE (RFQ)</span>
@@ -141,21 +131,19 @@ export const Client13PageTemplate: React.FC<Client13PageTemplateProps> = ({
       </section>
 
       {/* ======================================================== */}
-      {/* 2. SECTION TITLE BAR / BREADCRUMB                       */}
+      {/* 2. SECTION TITLE BAR / BREADCRUMB (Clean & Minimal)      */}
       {/* ======================================================== */}
-      <section className="bg-white border-b border-slate-200/90 sticky top-0 z-20 shadow-xs">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex items-center justify-between">
+      <section className="bg-white border-b border-slate-200 sticky top-16 sm:top-20 z-20 shadow-2xs">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <span className="w-2 h-2 rounded-sm bg-[#F97316]" />
-            <span className="text-xs sm:text-sm font-mono font-bold uppercase tracking-wider text-slate-900">
+            <span className="w-2.5 h-2.5 rounded-xs bg-[#F97316]" />
+            <span className="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-900 font-sans">
               {pageData.pageTitle}
             </span>
           </div>
 
-          <div className="flex items-center gap-2 text-xs font-mono text-slate-500">
-            <span>PAGE {pageData.pageNumber} OF 12</span>
-            <span className="hidden sm:inline text-slate-300">•</span>
-            <span className="hidden sm:inline text-slate-600">QUALISPECT GLOBAL SITEMAP</span>
+          <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+            Qualispect Quality System
           </div>
         </div>
       </section>
@@ -163,36 +151,36 @@ export const Client13PageTemplate: React.FC<Client13PageTemplateProps> = ({
       {/* ======================================================== */}
       {/* 3. 6-CARD CONTENT GRID (#F4F7FA)                         */}
       {/* ======================================================== */}
-      <section className="py-12 sm:py-16">
+      <section className="py-14 sm:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {pageData.cards.map((card, idx) => (
               <div 
                 key={card.id || idx}
-                className="bg-white rounded-xl border border-slate-200/90 shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-200 p-6 sm:p-7 flex flex-col justify-between text-left group"
+                className="bg-white rounded-xl border border-slate-200/90 shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-200 p-7 sm:p-8 flex flex-col justify-between text-left group"
               >
                 <div>
                   {/* Category Pill */}
-                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#F97316] bg-orange-50 border border-orange-200/60 px-2 py-0.5 rounded-sm inline-block mb-3">
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-[#F97316] bg-orange-50 border border-orange-200/60 px-2.5 py-1 rounded-sm inline-block mb-3.5">
                     {card.category}
                   </span>
 
                   {/* Card Title */}
-                  <h3 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight mb-2.5">
+                  <h3 className="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight mb-3">
                     {card.title}
                   </h3>
 
                   {/* Summary */}
-                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
+                  <p className="text-sm text-slate-600 leading-relaxed font-normal">
                     {card.summary}
                   </p>
 
                   {/* Bullet Points */}
-                  <ul className="mt-4 pt-3.5 border-t border-slate-100 space-y-2">
+                  <ul className="mt-5 pt-4 border-t border-slate-100 space-y-2.5">
                     {card.bullets.map((bullet, bIdx) => (
-                      <li key={bIdx} className="flex items-start gap-2 text-xs text-slate-700 leading-normal">
-                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
+                      <li key={bIdx} className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-700 leading-normal">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
                         <span>{bullet}</span>
                       </li>
                     ))}
@@ -200,10 +188,10 @@ export const Client13PageTemplate: React.FC<Client13PageTemplateProps> = ({
                 </div>
 
                 {/* Card Action Link */}
-                <div className="pt-5 mt-4 border-t border-slate-100 flex items-center justify-between">
+                <div className="pt-6 mt-4 border-t border-slate-100 flex items-center justify-between">
                   <button
                     onClick={() => setSelectedCard(card)}
-                    className="inline-flex items-center gap-1.5 text-xs font-mono font-bold uppercase tracking-wider text-[#F97316] hover:text-[#EA580C] group-hover:translate-x-0.5 transition-all cursor-pointer"
+                    className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#F97316] hover:text-[#EA580C] group-hover:translate-x-0.5 transition-all cursor-pointer"
                   >
                     <span>{card.actionLabel || 'VIEW DETAILS >'}</span>
                   </button>
@@ -225,15 +213,15 @@ export const Client13PageTemplate: React.FC<Client13PageTemplateProps> = ({
           {/* SPECIAL ON-PAGE FORM: ONLY ON PAGE 12 (Request Inspector)*/}
           {/* ======================================================== */}
           {pageData.id === 'request-an-inspector' && (
-            <div className="bg-white rounded-2xl border border-slate-200/90 shadow-lg p-6 sm:p-10 max-w-4xl mx-auto text-left">
-              <div className="border-b border-slate-200 pb-5 mb-6">
-                <span className="text-xs font-mono font-bold uppercase tracking-wider text-[#F97316] block">
+            <div className="bg-white rounded-2xl border border-slate-200 shadow-xl p-7 sm:p-12 max-w-4xl mx-auto text-left">
+              <div className="border-b border-slate-200 pb-6 mb-8">
+                <span className="text-xs font-bold uppercase tracking-wider text-[#F97316] block">
                   OFFICIAL DISPATCH REQUISITION
                 </span>
-                <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">
+                <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight mt-1">
                   Submit Third-Party Inspector Requisition
                 </h2>
-                <p className="text-xs sm:text-sm text-slate-500 mt-1">
+                <p className="text-sm text-slate-500 mt-1.5">
                   Direct dispatch coordination from our Houston corporate office. Confirmed within 4 business hours.
                 </p>
               </div>
@@ -264,7 +252,7 @@ export const Client13PageTemplate: React.FC<Client13PageTemplateProps> = ({
                   {/* Grid 1: Client & Contact */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-xs font-mono font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                      <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
                         Client / Company Name *
                       </label>
                       <input 
@@ -279,7 +267,7 @@ export const Client13PageTemplate: React.FC<Client13PageTemplateProps> = ({
                     </div>
 
                     <div>
-                      <label className="block text-xs font-mono font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                      <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
                         Project Name & Work Package
                       </label>
                       <input 
@@ -296,7 +284,7 @@ export const Client13PageTemplate: React.FC<Client13PageTemplateProps> = ({
                   {/* Grid 2: Email & Phone */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-xs font-mono font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                      <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
                         Technical Lead Email *
                       </label>
                       <input 
@@ -311,7 +299,7 @@ export const Client13PageTemplate: React.FC<Client13PageTemplateProps> = ({
                     </div>
 
                     <div>
-                      <label className="block text-xs font-mono font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                      <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
                         Direct Telephone Number *
                       </label>
                       <input 
@@ -329,7 +317,7 @@ export const Client13PageTemplate: React.FC<Client13PageTemplateProps> = ({
                   {/* Grid 3: Vendor Facility */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-xs font-mono font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                      <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
                         Vendor Shop Name *
                       </label>
                       <input 
@@ -344,7 +332,7 @@ export const Client13PageTemplate: React.FC<Client13PageTemplateProps> = ({
                     </div>
 
                     <div>
-                      <label className="block text-xs font-mono font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                      <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
                         Vendor Facility Location (City, Country) *
                       </label>
                       <input 
@@ -362,14 +350,14 @@ export const Client13PageTemplate: React.FC<Client13PageTemplateProps> = ({
                   {/* Grid 4: Equipment & Date */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-xs font-mono font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                      <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
                         Equipment Category *
                       </label>
                       <select 
                         name="equipmentType"
                         value={formData.equipmentType}
                         onChange={handleFormChange}
-                        className="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 text-sm focus:outline-hidden focus:ring-2 focus:ring-[#F97316] bg-slate-50"
+                        className="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 text-sm focus:outline-hidden focus:ring-2 focus:ring-[#F97316] bg-slate-50 font-medium"
                       >
                         <option>Pressure Vessels (ASME Sec VIII)</option>
                         <option>Piping & Flanges (ASME B31.3)</option>
@@ -383,7 +371,7 @@ export const Client13PageTemplate: React.FC<Client13PageTemplateProps> = ({
                     </div>
 
                     <div>
-                      <label className="block text-xs font-mono font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                      <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
                         Target Inspection Date *
                       </label>
                       <input 
@@ -399,7 +387,7 @@ export const Client13PageTemplate: React.FC<Client13PageTemplateProps> = ({
 
                   {/* Scope Description */}
                   <div>
-                    <label className="block text-xs font-mono font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                    <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
                       Scope of Work & Hold Points to Witness
                     </label>
                     <textarea 
@@ -430,7 +418,7 @@ export const Client13PageTemplate: React.FC<Client13PageTemplateProps> = ({
                     <button
                       type="button"
                       onClick={() => alert('Files can also be emailed directly to info@qualispect.com with your project reference.')}
-                      className="px-3.5 py-1.5 rounded bg-white border border-slate-200 text-xs font-bold text-slate-700 hover:bg-slate-50 shadow-xs"
+                      className="px-3.5 py-1.5 rounded-lg bg-white border border-slate-200 text-xs font-bold text-slate-700 hover:bg-slate-50 shadow-xs cursor-pointer"
                     >
                       Browse Files
                     </button>
@@ -468,7 +456,7 @@ export const Client13PageTemplate: React.FC<Client13PageTemplateProps> = ({
             {/* Modal Header */}
             <div className="bg-[#08253E] px-6 py-4 flex items-center justify-between text-white border-b border-[#0D3B62]">
               <div>
-                <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-amber-400 block">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-amber-400 block">
                   {selectedCard.category} • QUALISPECT SPECIFICATION
                 </span>
                 <h3 className="text-lg font-bold text-white mt-0.5">
@@ -477,7 +465,7 @@ export const Client13PageTemplate: React.FC<Client13PageTemplateProps> = ({
               </div>
               <button
                 onClick={() => setSelectedCard(null)}
-                className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition-colors"
+                className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -497,7 +485,7 @@ export const Client13PageTemplate: React.FC<Client13PageTemplateProps> = ({
 
               {/* Key Specs */}
               <div>
-                <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-800 block mb-2">
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-800 block mb-2">
                   Technical Specifications & Deliverables:
                 </span>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 bg-slate-50 p-3.5 rounded-lg border border-slate-200">
@@ -513,12 +501,12 @@ export const Client13PageTemplate: React.FC<Client13PageTemplateProps> = ({
               {/* Standards If present */}
               {selectedCard.modalDetails.applicableStandards && (
                 <div>
-                  <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-800 block mb-1.5">
+                  <span className="text-xs font-bold uppercase tracking-wider text-slate-800 block mb-1.5">
                     Governing Industrial Standards:
                   </span>
                   <div className="flex flex-wrap gap-1.5">
                     {selectedCard.modalDetails.applicableStandards.map((std, stdIdx) => (
-                      <span key={stdIdx} className="px-2 py-0.5 rounded text-[11px] font-mono bg-slate-100 text-slate-700 border border-slate-200">
+                      <span key={stdIdx} className="px-2 py-0.5 rounded text-[11px] font-semibold bg-slate-100 text-slate-700 border border-slate-200">
                         {std}
                       </span>
                     ))}
@@ -528,14 +516,14 @@ export const Client13PageTemplate: React.FC<Client13PageTemplateProps> = ({
 
               {/* Action Buttons */}
               <div className="pt-4 border-t border-slate-200 flex items-center justify-between">
-                <span className="text-xs text-slate-500 font-mono">
+                <span className="text-xs text-slate-500 font-medium">
                   Houston Desk: 281-764-6224
                 </span>
 
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => setSelectedCard(null)}
-                    className="px-4 py-2 rounded-lg border border-slate-300 text-xs font-semibold text-slate-700 hover:bg-slate-50"
+                    className="px-4 py-2 rounded-lg border border-slate-300 text-xs font-semibold text-slate-700 hover:bg-slate-50 cursor-pointer"
                   >
                     Close
                   </button>
@@ -544,7 +532,7 @@ export const Client13PageTemplate: React.FC<Client13PageTemplateProps> = ({
                       setSelectedCard(null);
                       openInspectorModal({ inspectionDiscipline: selectedCard.title });
                     }}
-                    className="px-5 py-2 rounded-lg bg-[#F97316] hover:bg-[#EA580C] text-white text-xs font-bold uppercase tracking-wider shadow"
+                    className="px-5 py-2 rounded-lg bg-[#F97316] hover:bg-[#EA580C] text-white text-xs font-bold uppercase tracking-wider shadow cursor-pointer"
                   >
                     Request Inspector
                   </button>

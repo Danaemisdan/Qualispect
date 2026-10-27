@@ -5,15 +5,7 @@ import {
   X, 
   HardHat, 
   FileText, 
-  ArrowRight,
-  Phone,
-  ShieldCheck,
-  Building2,
-  Globe2,
-  Briefcase,
-  Layers,
-  Award,
-  Users
+  ArrowRight
 } from 'lucide-react';
 import { PageId } from '../types';
 import { Logo } from './Logo';
@@ -54,7 +46,7 @@ export const Navbar: React.FC<NavbarProps> = ({
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // 4 Top-level categories from client mockups
+  // 4 Top-level categories matching client mockups
   const navCategories = [
     {
       label: 'ABOUT',
@@ -95,15 +87,13 @@ export const Navbar: React.FC<NavbarProps> = ({
   ];
 
   return (
-    <header ref={navRef} className="sticky top-0 z-40 bg-white border-b border-slate-200/90 shadow-xs">
+    <header ref={navRef} className="sticky top-0 z-40 bg-white border-b border-slate-200/90 shadow-xs font-sans">
       
-      {/* ======================================================== */}
-      {/* 1. TOP NAV BAR (White Background matching mockups)       */}
-      {/* ======================================================== */}
+      {/* Top Navigation Bar (Clean White Background strictly matching mockups) */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 sm:h-20">
           
-          {/* Left: Brand Logo */}
+          {/* Brand Logo */}
           <div 
             onClick={() => navigateTo('home')}
             className="cursor-pointer py-2 group flex items-center gap-3 select-none"
@@ -111,12 +101,12 @@ export const Navbar: React.FC<NavbarProps> = ({
             <Logo variant="light" size="md" />
           </div>
 
-          {/* Center: Desktop Navigation Links (ABOUT, SERVICES, INDUSTRIES, CONTACT) */}
+          {/* Desktop Navigation Links (HOME, ABOUT, SERVICES, INDUSTRIES, CONTACT) */}
           <nav className="hidden lg:flex items-center space-x-1 sm:space-x-2">
             
             <button
               onClick={() => navigateTo('home')}
-              className={`px-3 py-2 rounded-md text-xs font-mono font-bold tracking-wider transition-colors cursor-pointer ${
+              className={`px-3.5 py-2 rounded-lg text-xs font-bold tracking-wider uppercase transition-colors cursor-pointer ${
                 currentPage === 'home' 
                   ? 'text-[#F97316] bg-orange-50' 
                   : 'text-slate-700 hover:text-slate-900 hover:bg-slate-50'
@@ -134,7 +124,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   <button
                     onClick={() => setActiveDropdown(isOpen ? null : cat.label)}
                     onMouseEnter={() => setActiveDropdown(cat.label)}
-                    className={`inline-flex items-center gap-1 px-3 py-2 rounded-md text-xs font-mono font-bold tracking-wider transition-colors cursor-pointer ${
+                    className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-bold tracking-wider uppercase transition-colors cursor-pointer ${
                       isActive 
                         ? 'text-[#F97316] bg-orange-50' 
                         : 'text-slate-700 hover:text-slate-900 hover:bg-slate-50'
@@ -151,7 +141,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                       className="absolute top-full left-0 mt-1 w-80 bg-white rounded-xl shadow-xl border border-slate-200 p-2 z-50 text-left animate-in fade-in slide-in-from-top-2 duration-150"
                     >
                       <div className="px-3 py-2 border-b border-slate-100 mb-1">
-                        <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400 block">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">
                           QUALISPECT • {cat.label} PAGES
                         </span>
                       </div>
@@ -162,14 +152,14 @@ export const Navbar: React.FC<NavbarProps> = ({
                             onClick={() => navigateTo(item.id)}
                             className="p-2.5 rounded-lg hover:bg-slate-50 cursor-pointer transition-colors group flex items-start gap-2.5"
                           >
-                            <span className="text-[10px] font-mono font-bold text-[#F97316] bg-orange-50 px-1.5 py-0.5 rounded border border-orange-100 shrink-0 mt-0.5">
+                            <span className="text-[10px] font-bold text-[#F97316] bg-orange-50 px-1.5 py-0.5 rounded border border-orange-100 shrink-0 mt-0.5">
                               {item.num}
                             </span>
                             <div>
                               <span className="text-xs font-bold text-slate-800 group-hover:text-[#F97316] transition-colors block">
                                 {item.title}
                               </span>
-                              <span className="text-[11px] text-slate-500 line-clamp-1">
+                              <span className="text-[11px] text-slate-500 line-clamp-1 font-normal">
                                 {item.desc}
                               </span>
                             </div>
@@ -188,7 +178,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           <div className="hidden sm:flex items-center gap-3">
             <button
               onClick={() => openInspectorModal()}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#F97316] hover:bg-[#EA580C] text-white text-xs font-mono font-bold tracking-wider uppercase shadow-sm shadow-orange-950/20 transition-all cursor-pointer active:scale-[0.98]"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#F97316] hover:bg-[#EA580C] text-white text-xs font-bold tracking-wider uppercase shadow-sm shadow-orange-950/20 transition-all cursor-pointer active:scale-[0.98]"
             >
               <HardHat className="w-3.5 h-3.5" />
               <span>REQUEST AN INSPECTOR</span>
@@ -199,7 +189,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           <div className="flex sm:hidden items-center gap-2">
             <button
               onClick={() => openInspectorModal()}
-              className="px-3 py-1.5 rounded bg-[#F97316] text-white text-[11px] font-bold uppercase"
+              className="px-3 py-1.5 rounded-lg bg-[#F97316] text-white text-[11px] font-bold uppercase shadow-sm"
             >
               DISPATCH
             </button>
@@ -215,50 +205,10 @@ export const Navbar: React.FC<NavbarProps> = ({
         </div>
       </div>
 
-      {/* ======================================================== */}
-      {/* 2. DEDICATED 13-PAGE SWITCHER STRIP (Client Review Bar)  */}
-      {/* ======================================================== */}
-      <div className="bg-[#08253E] border-t border-[#0D3B62] px-2 sm:px-4 py-2 overflow-x-auto scrollbar-none">
-        <div className="max-w-7xl mx-auto flex items-center gap-1 sm:gap-2 min-w-max text-xs">
-          <span className="text-[10px] font-mono font-bold uppercase text-amber-400 shrink-0 px-2 flex items-center gap-1">
-            <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
-            <span>ALL 13 PAGES:</span>
-          </span>
-
-          {all13PagesList.map((p) => {
-            const isCurrent = currentPage === p.id || 
-              (p.id === 'vendor-inspection-source-surveillance' && currentPage === 'vendor-surveillance') ||
-              (p.id === 'projects-past-performance' && currentPage === 'projects') ||
-              (p.id === 'quality-certifications' && currentPage === 'quality') ||
-              (p.id === 'careers-inspector-network' && currentPage === 'careers') ||
-              (p.id === 'contact-request-a-quote' && (currentPage === 'contact' || currentPage === 'request-quote')) ||
-              (p.id === 'request-an-inspector' && currentPage === 'request-inspector');
-
-            return (
-              <button
-                key={p.pageNumber}
-                onClick={() => navigateTo(p.id)}
-                className={`px-2.5 py-1 rounded text-[11px] font-mono whitespace-nowrap transition-all cursor-pointer ${
-                  isCurrent
-                    ? 'bg-[#F97316] text-white font-bold shadow-xs'
-                    : 'text-slate-300 hover:text-white hover:bg-white/10'
-                }`}
-                title={p.pageTitle}
-              >
-                <span className="opacity-70 mr-1">{p.pageNumber}</span>
-                <span>{p.navLabel}</span>
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* ======================================================== */}
-      {/* 3. MOBILE MENU SLIDE-DOWN                                */}
-      {/* ======================================================== */}
+      {/* Mobile Menu Slide-Down */}
       {mobileMenuOpen && (
         <div className="sm:hidden bg-white border-b border-slate-200 px-4 py-6 space-y-4 max-h-[80vh] overflow-y-auto text-left shadow-xl">
-          <div className="text-xs font-mono font-bold uppercase text-slate-400 pb-2 border-b border-slate-100">
+          <div className="text-xs font-bold uppercase text-slate-400 pb-2 border-b border-slate-100">
             Navigation Menu (13 Pages)
           </div>
 
@@ -274,7 +224,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 }`}
               >
                 <div className="flex items-center gap-2">
-                  <span className="font-mono text-[10px] text-slate-400">{p.pageNumber}</span>
+                  <span className="text-[10px] text-slate-400">{p.pageNumber}</span>
                   <span>{p.pageTitle}</span>
                 </div>
                 <ArrowRight className="w-3.5 h-3.5 text-slate-400" />
