@@ -85,12 +85,12 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             </span>
           </div>
 
-          {/* Monumental Typography with High-End Sheen */}
-          <h1 className="text-3xl sm:text-5xl lg:text-[68px] font-bold tracking-[-0.035em] leading-[1.08] text-white font-sans">
-            <span className="bg-gradient-to-b from-white via-white to-stone-200 bg-clip-text text-transparent">
-              <BjorkDecodeText text="Quality. Compliance. Confidence." trigger="inView" charset="blocks" accentColor="#38BDF8" />
+          {/* Monumental Editorial Headline - Crisp, resilient typography without transparent clipping bugs */}
+          <h1 className="text-3xl sm:text-5xl lg:text-[64px] font-bold tracking-tight leading-[1.1] text-white font-sans">
+            <span className="block text-white">
+              Quality. Compliance. Confidence.
             </span>
-            <span className="block font-medium mt-1.5 sm:mt-2.5 text-xl sm:text-3xl lg:text-[40px] tracking-[-0.025em] bg-gradient-to-r from-sky-400 via-indigo-200 to-sky-300 bg-clip-text text-transparent">
+            <span className="block font-medium mt-1.5 sm:mt-2.5 text-xl sm:text-3xl lg:text-[38px] tracking-tight bg-gradient-to-r from-sky-400 via-sky-300 to-indigo-200 bg-clip-text text-transparent">
               Wherever your project takes you.
             </span>
           </h1>
