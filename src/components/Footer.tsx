@@ -658,33 +658,36 @@ export const Footer: React.FC<FooterProps> = ({
   ];
 
   const servicesLinks: LinkItem[] = [
-    { label: 'Vendor Surveillance', onClick: () => navigateTo('vendor-surveillance') },
-    { label: 'Third-Party QA/QC', onClick: () => navigateTo('services') },
-    { label: 'Welding & CWI', onClick: () => navigateTo('services') },
-    { label: 'Hydrostatic FAT', onClick: () => navigateTo('services') },
-    { label: 'Rotating Equipment', onClick: () => navigateTo('services') },
-    { label: 'Field Expediting', onClick: () => navigateTo('services') },
+    { label: 'Services Overview (02)', onClick: () => navigateTo('services') },
+    { label: 'Third-Party Inspection (03)', onClick: () => navigateTo('third-party-inspection') },
+    { label: 'Vendor Surveillance (04)', onClick: () => navigateTo('vendor-inspection-source-surveillance') },
+    { label: 'Government Contracting (09)', onClick: () => navigateTo('government-contracting') },
+    { label: 'Factory Acceptance Testing', onClick: () => navigateTo('services') },
+    { label: 'Source Expediting', onClick: () => navigateTo('services') },
   ];
 
   const companyLinks: LinkItem[] = [
-    { label: 'About Qualispect', onClick: () => navigateTo('about') },
-    { label: '45+ Countries Hub', onClick: () => navigateTo('global-coverage') },
-    { label: 'Industries We Support', onClick: () => navigateTo('industries') },
-    { label: 'Project Matrix', onClick: () => navigateTo('projects') },
-    { label: 'Quality System', onClick: () => navigateTo('quality') },
-    { label: 'Careers & Network', onClick: () => navigateTo('careers') },
+    { label: 'Home Page (00)', onClick: () => navigateTo('home') },
+    { label: 'About Qualispect (01)', onClick: () => navigateTo('about') },
+    { label: 'Industries (05)', onClick: () => navigateTo('industries') },
+    { label: 'Global Coverage 45+ (06)', onClick: () => navigateTo('global-coverage') },
+    { label: 'Projects & Track Record (07)', onClick: () => navigateTo('projects-past-performance') },
+    { label: 'Quality & Certifications (08)', onClick: () => navigateTo('quality-certifications') },
+    { label: 'Careers & Network (10)', onClick: () => navigateTo('careers-inspector-network') },
   ];
 
   const governmentLinks: LinkItem[] = [
-    { label: 'Federal Contracting Desk', onClick: () => navigateTo('government-contracting') },
-    { label: 'Capability Sheet (PDF)', onClick: openCapabilityModal },
-    { label: 'SAM.gov Verified (CAGE: 7S2L7)', onClick: () => navigateTo('government-contracting') },
+    { label: 'Government Contracting (09)', onClick: () => navigateTo('government-contracting') },
+    { label: 'Capability Statement (PDF)', onClick: openCapabilityModal },
+    { label: 'SAM.gov (CAGE 7S2L7)', onClick: () => navigateTo('government-contracting') },
+    { label: 'Unique Entity ID: L3C9LLNA2KJ9', onClick: () => navigateTo('government-contracting') },
   ];
 
   const dispatchLinks: LinkItem[] = [
-    { label: 'Request Inspector', onClick: openInspectorModal },
-    { label: 'Request Technical RFQ', onClick: openQuoteModal },
-    { label: 'Contact Houston HQ', onClick: () => navigateTo('contact') },
+    { label: 'Contact & Request Quote (11)', onClick: () => navigateTo('contact-request-a-quote') },
+    { label: 'Request an Inspector (12)', onClick: () => navigateTo('request-an-inspector') },
+    { label: 'Launch Dispatch Form', onClick: openInspectorModal },
+    { label: 'Call Houston: 281-764-6224', href: 'tel:2817646224' },
   ];
 
   const letters = useMemo(() => Array.from(wordmark), [wordmark]);
@@ -969,13 +972,13 @@ export const Footer: React.FC<FooterProps> = ({
           {/* Desktop Only: Credits & Credentials Block */}
           <div className="bwf-credits bwf-desktop-credits">
             <p className="bwf-fade" style={getNextDelay()}>
-              Headquarters: <b>9801 Westheimer Rd, Suite 300, Houston, TX 77042</b>
+              Headquarters: <b>2703 Highway 6 S, Suite 159, Houston, TX 77082</b>
             </p>
             <p className="bwf-fade" style={getNextDelay()}>
-              Federal Contracting: <b>CAGE: 7S2L7 • UEI: L3C9LLNA2KJ9 • SAM.gov Verified</b>
+              Phone: <b>281-764-6224 / 281-764-1335</b> • Email: <b>info@qualispect.com</b>
             </p>
             <p className="bwf-fade" style={getNextDelay()}>
-              Quality Framework: <b>Independent Technical Surveillance Aligned with ISO 17020</b>
+              Quality Slogan: <b>Quality. Compliance. Confidence. Wherever your project takes you.</b>
             </p>
           </div>
         </div>

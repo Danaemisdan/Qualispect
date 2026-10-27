@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'framer-motion';
 import { 
   ChevronDown, 
   Menu, 
@@ -7,12 +6,18 @@ import {
   HardHat, 
   FileText, 
   ArrowRight,
-  Phone
+  Phone,
+  ShieldCheck,
+  Building2,
+  Globe2,
+  Briefcase,
+  Layers,
+  Award,
+  Users
 } from 'lucide-react';
 import { PageId } from '../types';
 import { Logo } from './Logo';
-import { servicesData } from '../data/servicesData';
-import { BjorkDecodeText } from './ui/BjorkDecodeText';
+import { all13PagesList } from '../data/pages13Data';
 
 interface NavbarProps {
   currentPage: PageId;
@@ -27,43 +32,15 @@ export const Navbar: React.FC<NavbarProps> = ({
   openInspectorModal,
   openQuoteModal
 }) => {
-  const [isVisible, setIsVisible] = useState(true);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [navQuoteHovered, setNavQuoteHovered] = useState(false);
-  const [navInspectorHovered, setNavInspectorHovered] = useState(false);
-  const [servicesDropdownOpen, setServicesDropdownOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
-
-  const { scrollY } = useScroll();
-  const lastScrollY = useRef(0);
-
-  // Auto-hide navbar when scrolling down on desktop/laptop; reveal when scrolling up
-  useMotionValueEvent(scrollY, "change", (latest) => {
-    const previous = lastScrollY.current;
-    const diff = latest - previous;
-    
-    // Near top: always visible
-    if (latest < 40) {
-      setIsVisible(true);
-    } 
-    // Scrolling down by more than 8px past the hero header: slide out of view
-    else if (diff > 8 && latest > 80) {
-      setIsVisible(false);
-      setServicesDropdownOpen(false);
-    } 
-    // Scrolling up by more than 8px: reveal navbar
-    else if (diff < -8) {
-      setIsVisible(true);
-    }
-    
-    lastScrollY.current = latest;
-  });
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const navRef = useRef<HTMLDivElement>(null);
 
   // Close dropdown on outside click
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setServicesDropdownOpen(false);
+      if (navRef.current && !navRef.current.contains(event.target as Node)) {
+        setActiveDropdown(null);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -73,369 +50,264 @@ export const Navbar: React.FC<NavbarProps> = ({
   const navigateTo = (page: PageId) => {
     setCurrentPage(page);
     setMobileMenuOpen(false);
-    setServicesDropdownOpen(false);
+    setActiveDropdown(null);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const primaryNavLinks: { id: PageId; label: string }[] = [
-    { id: 'industries', label: 'Industries' },
-    { id: 'global-coverage', label: 'Coverage' },
-    { id: 'about', label: 'About' },
-    { id: 'quality', label: 'Quality' },
-    { id: 'contact', label: 'Contact' }
+  // 4 Top-level categories from client mockups
+  const navCategories = [
+    {
+      label: 'ABOUT',
+      activeOn: ['about', 'quality-certifications', 'quality', 'careers-inspector-network', 'careers'],
+      items: [
+        { id: 'about' as PageId, num: '01', title: 'About Qualispect', desc: 'Our mission, approach, and engineering foundation' },
+        { id: 'quality-certifications' as PageId, num: '08', title: 'Quality & Certifications', desc: 'ISO 9001/17020 QMS and inspector qualification' },
+        { id: 'careers-inspector-network' as PageId, num: '10', title: 'Careers & Inspector Network', desc: 'Join our international roster of certified inspectors' }
+      ]
+    },
+    {
+      label: 'SERVICES',
+      activeOn: ['services', 'third-party-inspection', 'vendor-inspection-source-surveillance', 'vendor-surveillance', 'government-contracting'],
+      items: [
+        { id: 'services' as PageId, num: '02', title: 'Services Overview', desc: 'Vendor surveillance, QA/QC, FAT, and expediting' },
+        { id: 'third-party-inspection' as PageId, num: '03', title: 'Third-Party Inspection', desc: 'Independent shop floor verification & witness' },
+        { id: 'vendor-inspection-source-surveillance' as PageId, num: '04', title: 'Vendor Inspection & Surveillance', desc: 'Your eyes at the vendor: 5-step surveillance' },
+        { id: 'government-contracting' as PageId, num: '09', title: 'Government Contracting', desc: 'SAM.gov registered (CAGE 7S2L7, UEI L3C9LLNA2KJ9)' }
+      ]
+    },
+    {
+      label: 'INDUSTRIES',
+      activeOn: ['industries', 'projects-past-performance', 'projects', 'global-coverage'],
+      items: [
+        { id: 'industries' as PageId, num: '05', title: 'Industries', desc: 'Oil & Gas, Power, Petrochemical, Infrastructure' },
+        { id: 'projects-past-performance' as PageId, num: '07', title: 'Projects & Past Performance', desc: 'Verified case studies and project track record' },
+        { id: 'global-coverage' as PageId, num: '06', title: 'Global Coverage', desc: 'Local accredited inspectors in 45+ countries' }
+      ]
+    },
+    {
+      label: 'CONTACT',
+      activeOn: ['contact-request-a-quote', 'contact', 'request-an-inspector', 'request-inspector', 'request-quote'],
+      items: [
+        { id: 'contact-request-a-quote' as PageId, num: '11', title: 'Contact & Request a Quote', desc: 'Houston HQ coordination desk and 4h RFQ proposals' },
+        { id: 'request-an-inspector' as PageId, num: '12', title: 'Request an Inspector', desc: 'Deploy an accredited inspector within 24–48 hours' }
+      ]
+    }
   ];
 
   return (
-    <>
-      {/* Fixed Header Container with Smart Auto-Hide Slide Transition */}
-      <motion.header
-        initial={{ y: 0, opacity: 1 }}
-        animate={{ 
-          y: isVisible ? 0 : -100,
-          opacity: isVisible ? 1 : 0
-        }}
-        transition={{ 
-          duration: 0.28,
-          ease: [0.16, 1, 0.3, 1]
-        }}
-        className="fixed top-3 sm:top-4 left-0 right-0 z-50 flex justify-center px-3 sm:px-6 pointer-events-none"
-      >
-        {/* Floating Capsule Bar */}
-        <nav className="pointer-events-auto relative flex items-center justify-between rounded-full border border-stone-200/90 bg-white/95 backdrop-blur-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] px-4 sm:px-5 py-2 max-w-6xl w-full transition-all">
-
-          {/* ======================================================== */}
-          {/* 1. BRAND LOGO (Left)                                     */}
-          {/* ======================================================== */}
+    <header ref={navRef} className="sticky top-0 z-40 bg-white border-b border-slate-200/90 shadow-xs">
+      
+      {/* ======================================================== */}
+      {/* 1. TOP NAV BAR (White Background matching mockups)       */}
+      {/* ======================================================== */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16 sm:h-20">
+          
+          {/* Left: Brand Logo */}
           <div 
-            onClick={() => navigateTo('home')} 
-            className="flex items-center cursor-pointer shrink-0 select-none py-0.5"
+            onClick={() => navigateTo('home')}
+            className="cursor-pointer py-2 group flex items-center gap-3 select-none"
           >
-            <Logo size="sm" variant="light" />
+            <Logo variant="light" size="md" />
           </div>
 
-          {/* ======================================================== */}
-          {/* 2. CENTER DESKTOP NAVIGATION LINKS (Hidden on Mobile)   */}
-          {/* ======================================================== */}
-          <div className="hidden lg:flex items-center gap-1 text-[13px] font-medium text-stone-600">
+          {/* Center: Desktop Navigation Links (ABOUT, SERVICES, INDUSTRIES, CONTACT) */}
+          <nav className="hidden lg:flex items-center space-x-1 sm:space-x-2">
             
-            {/* Services with Mega Dropdown */}
-            <div className="relative" ref={dropdownRef}>
-              <button
-                onClick={() => setServicesDropdownOpen(!servicesDropdownOpen)}
-                className={`flex items-center gap-1 px-3 py-1.5 rounded-full transition-all whitespace-nowrap cursor-pointer ${
-                  currentPage === 'services' || currentPage === 'vendor-surveillance'
-                    ? 'text-stone-900 bg-stone-100 font-semibold' 
-                    : 'text-stone-600 hover:text-stone-900 hover:bg-stone-50'
-                }`}
-              >
-                <span>Services</span>
-                <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${
-                  servicesDropdownOpen ? 'rotate-180 text-amber-700' : 'text-stone-400'
-                }`} />
-              </button>
-
-              {/* Glass Mega Dropdown */}
-              <AnimatePresence>
-                {servicesDropdownOpen && (
-                  <motion.div 
-                    initial={{ opacity: 0, y: 10, scale: 0.98 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: 8, scale: 0.98 }}
-                    transition={{ duration: 0.15 }}
-                    className="absolute top-full left-0 w-[320px] pt-2.5 z-50"
-                  >
-                    <div className="bg-white/95 border border-stone-200 rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.12)] p-2 backdrop-blur-2xl divide-y divide-stone-100 text-stone-800">
-                      
-                      <div className="p-1.5">
-                        <button
-                          onClick={() => navigateTo('services')}
-                          className="w-full text-left px-3 py-2 text-xs font-bold text-amber-800 hover:bg-stone-50 rounded-xl flex items-center justify-between transition-colors font-mono"
-                        >
-                          <span>ALL 10 TECHNICAL SERVICES</span>
-                          <ArrowRight className="w-3.5 h-3.5" />
-                        </button>
-                      </div>
-
-                      <div className="py-1 max-h-[300px] overflow-y-auto space-y-0.5">
-                        {servicesData.slice(0, 6).map((svc) => (
-                          <button
-                            key={svc.id}
-                            onClick={() => {
-                              if (svc.id === 'third-party-inspection') {
-                                navigateTo('vendor-surveillance');
-                              } else {
-                                navigateTo('services');
-                              }
-                            }}
-                            className="w-full text-left px-3 py-2 text-xs text-stone-700 hover:text-stone-950 hover:bg-stone-50 rounded-xl flex items-center justify-between transition-colors group cursor-pointer"
-                          >
-                            <span className="truncate">{svc.title}</span>
-                            <ArrowRight className="w-3 h-3 opacity-0 group-hover:opacity-100 text-stone-400 group-hover:translate-x-0.5 transition-all" />
-                          </button>
-                        ))}
-                      </div>
-
-                      <div className="p-2 bg-stone-50/60 rounded-b-xl flex items-center justify-between text-[11px] font-mono text-stone-500">
-                        <span>Houston Technical Desk</span>
-                        <a href="tel:2817646224" className="text-stone-900 font-semibold hover:underline">
-                          281-764-6224
-                        </a>
-                      </div>
-
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-
-            {/* Primary Nav Links */}
-            {primaryNavLinks.map((link) => (
-              <button
-                key={link.id}
-                onClick={() => navigateTo(link.id)}
-                className={`px-3 py-1.5 rounded-full transition-all whitespace-nowrap cursor-pointer ${
-                  currentPage === link.id
-                    ? 'text-stone-950 bg-stone-100 font-semibold' 
-                    : 'text-stone-600 hover:text-stone-950 hover:bg-stone-50'
-                }`}
-              >
-                {link.label}
-              </button>
-            ))}
-
             <button
-              onClick={() => navigateTo('projects')}
-              className={`px-3 py-1.5 rounded-full transition-all whitespace-nowrap cursor-pointer ${
-                currentPage === 'projects'
-                  ? 'text-stone-950 bg-stone-100 font-semibold' 
-                  : 'text-stone-600 hover:text-stone-950 hover:bg-stone-50'
+              onClick={() => navigateTo('home')}
+              className={`px-3 py-2 rounded-md text-xs font-mono font-bold tracking-wider transition-colors cursor-pointer ${
+                currentPage === 'home' 
+                  ? 'text-[#F97316] bg-orange-50' 
+                  : 'text-slate-700 hover:text-slate-900 hover:bg-slate-50'
               }`}
             >
-              Projects
+              HOME
             </button>
 
+            {navCategories.map((cat) => {
+              const isActive = cat.activeOn.includes(currentPage as string);
+              const isOpen = activeDropdown === cat.label;
+
+              return (
+                <div key={cat.label} className="relative">
+                  <button
+                    onClick={() => setActiveDropdown(isOpen ? null : cat.label)}
+                    onMouseEnter={() => setActiveDropdown(cat.label)}
+                    className={`inline-flex items-center gap-1 px-3 py-2 rounded-md text-xs font-mono font-bold tracking-wider transition-colors cursor-pointer ${
+                      isActive 
+                        ? 'text-[#F97316] bg-orange-50' 
+                        : 'text-slate-700 hover:text-slate-900 hover:bg-slate-50'
+                    }`}
+                  >
+                    <span>{cat.label}</span>
+                    <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-150 ${isOpen ? 'rotate-180 text-[#F97316]' : 'text-slate-400'}`} />
+                  </button>
+
+                  {/* Dropdown Menu */}
+                  {isOpen && (
+                    <div 
+                      onMouseLeave={() => setActiveDropdown(null)}
+                      className="absolute top-full left-0 mt-1 w-80 bg-white rounded-xl shadow-xl border border-slate-200 p-2 z-50 text-left animate-in fade-in slide-in-from-top-2 duration-150"
+                    >
+                      <div className="px-3 py-2 border-b border-slate-100 mb-1">
+                        <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400 block">
+                          QUALISPECT • {cat.label} PAGES
+                        </span>
+                      </div>
+                      <div className="space-y-1">
+                        {cat.items.map((item) => (
+                          <div
+                            key={item.id}
+                            onClick={() => navigateTo(item.id)}
+                            className="p-2.5 rounded-lg hover:bg-slate-50 cursor-pointer transition-colors group flex items-start gap-2.5"
+                          >
+                            <span className="text-[10px] font-mono font-bold text-[#F97316] bg-orange-50 px-1.5 py-0.5 rounded border border-orange-100 shrink-0 mt-0.5">
+                              {item.num}
+                            </span>
+                            <div>
+                              <span className="text-xs font-bold text-slate-800 group-hover:text-[#F97316] transition-colors block">
+                                {item.title}
+                              </span>
+                              <span className="text-[11px] text-slate-500 line-clamp-1">
+                                {item.desc}
+                              </span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+
+          </nav>
+
+          {/* Right: Primary Orange CTA Button */}
+          <div className="hidden sm:flex items-center gap-3">
+            <button
+              onClick={() => openInspectorModal()}
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#F97316] hover:bg-[#EA580C] text-white text-xs font-mono font-bold tracking-wider uppercase shadow-sm shadow-orange-950/20 transition-all cursor-pointer active:scale-[0.98]"
+            >
+              <HardHat className="w-3.5 h-3.5" />
+              <span>REQUEST AN INSPECTOR</span>
+            </button>
           </div>
 
-          {/* ======================================================== */}
-          {/* 3. DESKTOP ACTION BUTTONS (Right - Hidden on Mobile)     */}
-          {/* ======================================================== */}
-          <div className="hidden lg:flex items-center gap-2.5 shrink-0">
-            
-            {/* Direct Houston Phone Icon Pill */}
-            <a
-              href="tel:2817646224"
-              title="Call Houston Operations Desk: 281-764-6224"
-              className="flex items-center justify-center w-8.5 h-8.5 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-700 transition-colors"
-            >
-              <Phone className="w-3.5 h-3.5 text-stone-700" />
-            </a>
-
-            {/* Request a Quote Button */}
+          {/* Mobile Hamburger Toggle */}
+          <div className="flex sm:hidden items-center gap-2">
             <button
-              onClick={(e) => {
-                e.stopPropagation();
-                openQuoteModal();
-              }}
-              onMouseEnter={() => setNavQuoteHovered(true)}
-              onMouseLeave={() => setNavQuoteHovered(false)}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-medium text-stone-700 hover:text-stone-950 bg-stone-100 hover:bg-stone-200 border border-stone-200 transition-all whitespace-nowrap cursor-pointer group"
+              onClick={() => openInspectorModal()}
+              className="px-3 py-1.5 rounded bg-[#F97316] text-white text-[11px] font-bold uppercase"
             >
-              <FileText className="w-3.5 h-3.5 text-stone-500" />
-              <BjorkDecodeText 
-                text="Quote" 
-                isHovered={navQuoteHovered}
-                charset="matrix"
-                speed={16}
-                accentColor="#D97706"
-              />
+              DISPATCH
             </button>
-
-            {/* Primary Action Button (Generously Padded) */}
             <button
-              onClick={(e) => {
-                e.stopPropagation();
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="p-2 rounded-lg text-slate-700 hover:bg-slate-100"
+              aria-label="Toggle menu"
+            >
+              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+      {/* ======================================================== */}
+      {/* 2. DEDICATED 13-PAGE SWITCHER STRIP (Client Review Bar)  */}
+      {/* ======================================================== */}
+      <div className="bg-[#08253E] border-t border-[#0D3B62] px-2 sm:px-4 py-2 overflow-x-auto scrollbar-none">
+        <div className="max-w-7xl mx-auto flex items-center gap-1 sm:gap-2 min-w-max text-xs">
+          <span className="text-[10px] font-mono font-bold uppercase text-amber-400 shrink-0 px-2 flex items-center gap-1">
+            <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+            <span>ALL 13 PAGES:</span>
+          </span>
+
+          {all13PagesList.map((p) => {
+            const isCurrent = currentPage === p.id || 
+              (p.id === 'vendor-inspection-source-surveillance' && currentPage === 'vendor-surveillance') ||
+              (p.id === 'projects-past-performance' && currentPage === 'projects') ||
+              (p.id === 'quality-certifications' && currentPage === 'quality') ||
+              (p.id === 'careers-inspector-network' && currentPage === 'careers') ||
+              (p.id === 'contact-request-a-quote' && (currentPage === 'contact' || currentPage === 'request-quote')) ||
+              (p.id === 'request-an-inspector' && currentPage === 'request-inspector');
+
+            return (
+              <button
+                key={p.pageNumber}
+                onClick={() => navigateTo(p.id)}
+                className={`px-2.5 py-1 rounded text-[11px] font-mono whitespace-nowrap transition-all cursor-pointer ${
+                  isCurrent
+                    ? 'bg-[#F97316] text-white font-bold shadow-xs'
+                    : 'text-slate-300 hover:text-white hover:bg-white/10'
+                }`}
+                title={p.pageTitle}
+              >
+                <span className="opacity-70 mr-1">{p.pageNumber}</span>
+                <span>{p.navLabel}</span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* ======================================================== */}
+      {/* 3. MOBILE MENU SLIDE-DOWN                                */}
+      {/* ======================================================== */}
+      {mobileMenuOpen && (
+        <div className="sm:hidden bg-white border-b border-slate-200 px-4 py-6 space-y-4 max-h-[80vh] overflow-y-auto text-left shadow-xl">
+          <div className="text-xs font-mono font-bold uppercase text-slate-400 pb-2 border-b border-slate-100">
+            Navigation Menu (13 Pages)
+          </div>
+
+          <div className="space-y-1">
+            {all13PagesList.map((p) => (
+              <button
+                key={p.pageNumber}
+                onClick={() => navigateTo(p.id)}
+                className={`w-full flex items-center justify-between p-2.5 rounded-lg text-xs font-bold text-left transition-colors ${
+                  currentPage === p.id 
+                    ? 'bg-orange-50 text-[#F97316]' 
+                    : 'text-slate-700 hover:bg-slate-50'
+                }`}
+              >
+                <div className="flex items-center gap-2">
+                  <span className="font-mono text-[10px] text-slate-400">{p.pageNumber}</span>
+                  <span>{p.pageTitle}</span>
+                </div>
+                <ArrowRight className="w-3.5 h-3.5 text-slate-400" />
+              </button>
+            ))}
+          </div>
+
+          <div className="pt-4 border-t border-slate-200 space-y-2">
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
                 openInspectorModal();
               }}
-              onMouseEnter={() => setNavInspectorHovered(true)}
-              onMouseLeave={() => setNavInspectorHovered(false)}
-              className="px-5 py-2.5 rounded-full text-xs font-semibold text-white bg-stone-900 hover:bg-black transition-all flex items-center gap-2 whitespace-nowrap cursor-pointer shadow-sm hover:shadow active:scale-95 tracking-wide group"
+              className="w-full py-3 rounded-lg bg-[#F97316] text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow"
             >
-              <BjorkDecodeText 
-                text="Request an Inspector" 
-                isHovered={navInspectorHovered}
-                charset="matrix"
-                speed={16}
-                accentColor="#F59E0B"
-              />
-              <ArrowRight className="w-3.5 h-3.5 text-stone-400 group-hover:translate-x-0.5 transition-transform" />
+              <HardHat className="w-4 h-4" />
+              <span>Request an Inspector</span>
             </button>
 
-          </div>
-
-          {/* ======================================================== */}
-          {/* 4. SIMPLE MOBILE MENU ICON (Right Side on Mobile Only)   */}
-          {/* ======================================================== */}
-          <div className="flex lg:hidden items-center shrink-0">
             <button
-              onClick={(e) => {
-                e.stopPropagation();
-                setMobileMenuOpen(!mobileMenuOpen);
+              onClick={() => {
+                setMobileMenuOpen(false);
+                openQuoteModal();
               }}
-              className="w-9 h-9 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-800 flex items-center justify-center transition-colors cursor-pointer focus:outline-none"
-              aria-label="Toggle navigation menu"
+              className="w-full py-3 rounded-lg bg-slate-100 text-slate-800 font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2"
             >
-              {mobileMenuOpen ? (
-                <X className="w-4.5 h-4.5 text-stone-900" />
-              ) : (
-                <Menu className="w-4.5 h-4.5 text-stone-900" />
-              )}
+              <FileText className="w-4 h-4" />
+              <span>Request a Quote (RFQ)</span>
             </button>
           </div>
+        </div>
+      )}
 
-        </nav>
-      </motion.header>
-
-      {/* ======================================================== */}
-      {/* 5. MOBILE RESPONSIVE DRAWER                              */}
-      {/* ======================================================== */}
-      <AnimatePresence>
-        {mobileMenuOpen && (
-          <div className="fixed inset-0 z-40 lg:hidden">
-            
-            {/* Backdrop Blur */}
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setMobileMenuOpen(false)}
-              className="absolute inset-0 bg-stone-900/30 backdrop-blur-sm"
-            />
-
-            {/* Light Glass Sheet */}
-            <motion.div
-              initial={{ opacity: 0, y: -20, scale: 0.96 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -20, scale: 0.96 }}
-              transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              className="absolute top-18 left-4 right-4 max-w-lg mx-auto bg-white/95 border border-stone-200 rounded-3xl p-5 shadow-[0_24px_70px_rgba(0,0,0,0.15)] backdrop-blur-3xl text-stone-900 space-y-4"
-            >
-              
-              {/* Quick Dual Actions */}
-              <div className="grid grid-cols-2 gap-2.5 pb-3 border-b border-stone-100">
-                <button
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    openInspectorModal();
-                  }}
-                  className="w-full bg-stone-900 text-white hover:bg-black font-medium text-xs tracking-wide uppercase py-3 rounded-xl flex items-center justify-center gap-1.5 shadow-sm active:scale-95 transition-all"
-                >
-                  <HardHat className="w-3.5 h-3.5 text-amber-400" />
-                  <span>Inspector</span>
-                </button>
-
-                <button
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    openQuoteModal();
-                  }}
-                  className="w-full bg-stone-100 hover:bg-stone-200 text-stone-800 border border-stone-200 font-medium text-xs tracking-wide uppercase py-3 rounded-xl flex items-center justify-center gap-1.5 active:scale-95 transition-all"
-                >
-                  <FileText className="w-3.5 h-3.5 text-stone-600" />
-                  <span>Quote (RFQ)</span>
-                </button>
-              </div>
-
-              {/* Navigation Links Grid */}
-              <div className="grid grid-cols-2 gap-1 text-sm font-medium">
-                <button
-                  onClick={() => navigateTo('home')}
-                  className={`w-full text-left px-3.5 py-2.5 rounded-xl transition-colors ${
-                    currentPage === 'home' ? 'bg-stone-100 text-stone-950 font-semibold' : 'text-stone-600 hover:bg-stone-50'
-                  }`}
-                >
-                  Home
-                </button>
-
-                <button
-                  onClick={() => navigateTo('services')}
-                  className={`w-full text-left px-3.5 py-2.5 rounded-xl transition-colors ${
-                    currentPage === 'services' ? 'bg-stone-100 text-stone-950 font-semibold' : 'text-stone-600 hover:bg-stone-50'
-                  }`}
-                >
-                  10 Services
-                </button>
-
-                <button
-                  onClick={() => navigateTo('vendor-surveillance')}
-                  className={`w-full text-left px-3.5 py-2.5 rounded-xl transition-colors ${
-                    currentPage === 'vendor-surveillance' ? 'bg-stone-100 text-stone-950 font-semibold' : 'text-stone-600 hover:bg-stone-50'
-                  }`}
-                >
-                  Vendor Surveillance
-                </button>
-
-                <button
-                  onClick={() => navigateTo('industries')}
-                  className={`w-full text-left px-3.5 py-2.5 rounded-xl transition-colors ${
-                    currentPage === 'industries' ? 'bg-stone-100 text-stone-950 font-semibold' : 'text-stone-600 hover:bg-stone-50'
-                  }`}
-                >
-                  Industries
-                </button>
-
-                <button
-                  onClick={() => navigateTo('global-coverage')}
-                  className={`w-full text-left px-3.5 py-2.5 rounded-xl transition-colors ${
-                    currentPage === 'global-coverage' ? 'bg-stone-100 text-stone-950 font-semibold' : 'text-stone-600 hover:bg-stone-50'
-                  }`}
-                >
-                  Coverage
-                </button>
-
-                <button
-                  onClick={() => navigateTo('about')}
-                  className={`w-full text-left px-3.5 py-2.5 rounded-xl transition-colors ${
-                    currentPage === 'about' ? 'bg-stone-100 text-stone-950 font-semibold' : 'text-stone-600 hover:bg-stone-50'
-                  }`}
-                >
-                  About
-                </button>
-
-                <button
-                  onClick={() => navigateTo('quality')}
-                  className={`w-full text-left px-3.5 py-2.5 rounded-xl transition-colors ${
-                    currentPage === 'quality' ? 'bg-stone-100 text-stone-950 font-semibold' : 'text-stone-600 hover:bg-stone-50'
-                  }`}
-                >
-                  Quality
-                </button>
-
-                <button
-                  onClick={() => navigateTo('contact')}
-                  className={`w-full text-left px-3.5 py-2.5 rounded-xl transition-colors ${
-                    currentPage === 'contact' ? 'bg-stone-100 text-stone-950 font-semibold' : 'text-stone-600 hover:bg-stone-50'
-                  }`}
-                >
-                  Contact
-                </button>
-              </div>
-
-              {/* Bottom Hotline in Drawer */}
-              <div className="pt-3 border-t border-stone-100 flex items-center justify-between text-xs text-stone-500 font-mono">
-                <a 
-                  href="tel:2817646224" 
-                  className="text-stone-900 font-bold flex items-center gap-1.5 hover:underline"
-                >
-                  <Phone className="w-3.5 h-3.5 text-stone-600" />
-                  <span>Houston: 281-764-6224</span>
-                </a>
-                <span className="text-[11px] text-stone-400">24/7 Global Dispatch</span>
-              </div>
-
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
-    </>
+    </header>
   );
 };

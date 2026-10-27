@@ -2,33 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { PageId } from './types';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
+import { Client13PageTemplate } from './components/Client13PageTemplate';
+import { pages13Data, Page13Data } from './data/pages13Data';
 
-// Modals
+// Conversion Modals
 import { RequestInspectorModal } from './components/modals/RequestInspectorModal';
 import { RequestQuoteModal } from './components/modals/RequestQuoteModal';
 import { CapabilityStatementModal } from './components/modals/CapabilityStatementModal';
 import { InspectorNetworkModal } from './components/modals/InspectorNetworkModal';
-
-// Home Landing Page Sections (Streamlined, Punchy, High-Impact)
-import { HeroSection } from './components/sections/HeroSection';
-import { MarketingStats } from './components/sections/MarketingStats';
-import { FunctionsHubSection } from './components/sections/FunctionsHubSection';
-import { FinanceBentoSection } from './components/sections/FinanceBentoSection';
-import { HeroLiquidMetalSection } from './components/sections/HeroLiquidMetalSection';
-import { HomeExploreStrip } from './components/sections/HomeExploreStrip';
-import { GradientBlindsCTABanner } from './components/sections/GradientBlindsCTABanner';
-
-// Dedicated Sub-Pages
-import { AboutPage } from './pages/AboutPage';
-import { ServicesPage } from './pages/ServicesPage';
-import { VendorSurveillancePage } from './pages/VendorSurveillancePage';
-import { IndustriesPage } from './pages/IndustriesPage';
-import { GlobalCoveragePage } from './pages/GlobalCoveragePage';
-import { ProjectsPage } from './pages/ProjectsPage';
-import { QualityPage } from './pages/QualityPage';
-import { GovernmentContractingPage } from './pages/GovernmentContractingPage';
-import { CareersPage } from './pages/CareersPage';
-import { ContactPage } from './pages/ContactPage';
 
 // Floating UI Icons
 import { ChevronUp } from 'lucide-react';
@@ -46,17 +27,51 @@ export function App() {
   const [isInspectorNetworkModalOpen, setIsInspectorNetworkModalOpen] = useState(false);
   const [networkModalJobTitle, setNetworkModalJobTitle] = useState<string | undefined>(undefined);
 
+  // Canonical mapping of all hash routes & aliases to the 13 exact pages
+  const pageRouteMap: Record<string, string> = {
+    // 00. Home
+    '': 'home',
+    'home': 'home',
+    // 01. About
+    'about': 'about',
+    // 02. Services
+    'services': 'services',
+    // 03. Third-Party Inspection
+    'third-party-inspection': 'third-party-inspection',
+    // 04. Vendor Inspection & Source Surveillance
+    'vendor-inspection-source-surveillance': 'vendor-inspection-source-surveillance',
+    'vendor-surveillance': 'vendor-inspection-source-surveillance',
+    // 05. Industries
+    'industries': 'industries',
+    // 06. Global Coverage
+    'global-coverage': 'global-coverage',
+    // 07. Projects & Past Performance
+    'projects-past-performance': 'projects-past-performance',
+    'projects': 'projects-past-performance',
+    // 08. Quality & Certifications
+    'quality-certifications': 'quality-certifications',
+    'quality': 'quality-certifications',
+    // 09. Government Contracting
+    'government-contracting': 'government-contracting',
+    // 10. Careers & Inspector Network
+    'careers-inspector-network': 'careers-inspector-network',
+    'careers': 'careers-inspector-network',
+    // 11. Contact & Request a Quote
+    'contact-request-a-quote': 'contact-request-a-quote',
+    'contact': 'contact-request-a-quote',
+    'request-quote': 'contact-request-a-quote',
+    // 12. Request an Inspector
+    'request-an-inspector': 'request-an-inspector',
+    'request-inspector': 'request-an-inspector'
+  };
+
   // Sync with window hash for seamless back/forward browser navigation
   useEffect(() => {
     const handleHashChange = () => {
-      const hash = window.location.hash.replace('#/', '').replace('#', '');
-      const validPages: PageId[] = [
-        'home', 'about', 'services', 'vendor-surveillance', 'industries', 
-        'global-coverage', 'projects', 'quality', 'government-contracting', 
-        'careers', 'contact', 'request-inspector', 'request-quote'
-      ];
-      if (validPages.includes(hash as PageId)) {
-        setCurrentPage(hash as PageId);
+      const hash = window.location.hash.replace('#/', '').replace('#', '').trim();
+      const mappedId = pageRouteMap[hash];
+      if (mappedId) {
+        setCurrentPage(mappedId as PageId);
       }
     };
 
@@ -70,8 +85,9 @@ export function App() {
 
   // Update hash when page changes
   const navigateTo = (page: PageId) => {
-    setCurrentPage(page);
-    window.location.hash = `/${page === 'home' ? '' : page}`;
+    const canonicalKey = pageRouteMap[page] || page;
+    setCurrentPage(canonicalKey as PageId);
+    window.location.hash = `/${canonicalKey === 'home' ? '' : canonicalKey}`;
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -105,10 +121,14 @@ export function App() {
     setIsInspectorNetworkModalOpen(true);
   };
 
+  // Resolve canonical page data from pages13Data
+  const activeCanonicalKey = pageRouteMap[currentPage] || 'home';
+  const currentActivePageData: Page13Data = pages13Data[activeCanonicalKey] || pages13Data['home'];
+
   return (
-    <div className="min-h-screen flex flex-col bg-[#FAFAF9] text-stone-900 selection:bg-amber-500 selection:text-white antialiased">
+    <div className="min-h-screen flex flex-col bg-[#F4F7FA] text-slate-900 selection:bg-amber-500 selection:text-white antialiased font-sans">
       
-      {/* Sticky Header */}
+      {/* 1. Official White Header with 13-Page Navigation & Switcher */}
       <Navbar 
         currentPage={currentPage}
         setCurrentPage={navigateTo}
@@ -116,158 +136,18 @@ export function App() {
         openQuoteModal={openQuoteModal}
       />
 
-      {/* Main Page Rendering */}
+      {/* 2. Main Page Template Rendering the Selected Page (00 through 12) */}
       <main className="flex-grow">
-        {/* ======================================================== */}
-        {/* 1. STREAMLINED HOME LANDING PAGE                        */}
-        {/* ======================================================== */}
-        {currentPage === 'home' && (
-          <>
-            {/* 1. Hero with Sapphire GlassFold & Isaiah Bjork badges */}
-            <HeroSection 
-              navigateTo={navigateTo}
-              openInspectorModal={openInspectorModal}
-              openQuoteModal={openQuoteModal}
-            />
-
-            {/* 2. Key Metrics + Aadil Ghani Webhook Relay Graphic */}
-            <MarketingStats 
-              navigateTo={navigateTo}
-              openInspectorModal={openInspectorModal}
-              openQuoteModal={openQuoteModal}
-            />
-
-            {/* 3. Lucas Markes 8-Node Hub + Aadil Ghani Deploy Pipeline */}
-            <FunctionsHubSection 
-              navigateTo={navigateTo}
-              openInspectorModal={openInspectorModal}
-            />
-
-            {/* 4. Roman Vasnev Finance Bento (Industrial Speed & Quality) */}
-            <FinanceBentoSection 
-              navigateTo={navigateTo}
-              openInspectorModal={openInspectorModal}
-            />
-
-            {/* 5. Liquid Metal Metallurgy & Testing Rigor Terminal */}
-            <HeroLiquidMetalSection 
-              navigateTo={navigateTo}
-              openInspectorModal={openInspectorModal}
-              openQuoteModal={openQuoteModal}
-            />
-
-            {/* 6. Executive Portals Strip (Coverage, Projects, Quality, Government) */}
-            <HomeExploreStrip 
-              navigateTo={navigateTo}
-            />
-
-            {/* 7. Dev Brijosh Crimson WebGL Blinds Final CTA Banner */}
-            <GradientBlindsCTABanner 
-              navigateTo={navigateTo}
-              openInspectorModal={openInspectorModal}
-              openQuoteModal={openQuoteModal}
-            />
-          </>
-        )}
-
-        {/* ======================================================== */}
-        {/* 2. DEDICATED SUB-PAGES                                  */}
-        {/* ======================================================== */}
-        {currentPage === 'about' && (
-          <AboutPage 
-            navigateTo={navigateTo}
-            openInspectorModal={openInspectorModal}
-            openQuoteModal={openQuoteModal}
-          />
-        )}
-
-        {currentPage === 'services' && (
-          <ServicesPage 
-            navigateTo={navigateTo}
-            openInspectorModal={openInspectorModal}
-            openQuoteModal={openQuoteModal}
-          />
-        )}
-
-        {currentPage === 'vendor-surveillance' && (
-          <VendorSurveillancePage 
-            navigateTo={navigateTo}
-            openInspectorModal={openInspectorModal}
-          />
-        )}
-
-        {currentPage === 'industries' && (
-          <IndustriesPage 
-            navigateTo={navigateTo}
-            openInspectorModal={openInspectorModal}
-            openQuoteModal={openQuoteModal}
-          />
-        )}
-
-        {currentPage === 'global-coverage' && (
-          <GlobalCoveragePage 
-            navigateTo={navigateTo}
-            openInspectorModal={openInspectorModal}
-            openQuoteModal={openQuoteModal}
-          />
-        )}
-
-        {currentPage === 'projects' && (
-          <ProjectsPage 
-            navigateTo={navigateTo}
-            openInspectorModal={openInspectorModal}
-            openQuoteModal={openQuoteModal}
-          />
-        )}
-
-        {currentPage === 'quality' && (
-          <QualityPage 
-            navigateTo={navigateTo}
-            openInspectorModal={openInspectorModal}
-            openQuoteModal={openQuoteModal}
-          />
-        )}
-
-        {currentPage === 'government-contracting' && (
-          <GovernmentContractingPage 
-            navigateTo={navigateTo}
-            openCapabilityModal={openCapabilityModal}
-            openQuoteModal={openQuoteModal}
-          />
-        )}
-
-        {currentPage === 'careers' && (
-          <CareersPage 
-            navigateTo={navigateTo}
-            openInspectorNetworkModal={openInspectorNetworkModal}
-          />
-        )}
-
-        {currentPage === 'contact' && (
-          <ContactPage 
-            navigateTo={navigateTo}
-            openInspectorModal={openInspectorModal}
-            openQuoteModal={openQuoteModal}
-          />
-        )}
-
-        {currentPage === 'request-inspector' && (
-          <VendorSurveillancePage 
-            navigateTo={navigateTo}
-            openInspectorModal={openInspectorModal}
-          />
-        )}
-
-        {currentPage === 'request-quote' && (
-          <ContactPage 
-            navigateTo={navigateTo}
-            openInspectorModal={openInspectorModal}
-            openQuoteModal={openQuoteModal}
-          />
-        )}
+        <Client13PageTemplate 
+          pageData={currentActivePageData}
+          navigateTo={navigateTo}
+          openInspectorModal={openInspectorModal}
+          openQuoteModal={openQuoteModal}
+          openCapabilityModal={openCapabilityModal}
+        />
       </main>
 
-      {/* 21st.dev Kedhareswer Naidu: Light Beam Footer with Giant Wordmark */}
+      {/* 3. Official Kedhareswer Naidu Light Beam Footer with Giant Wordmark & 13-Page Directory */}
       <Footer 
         setCurrentPage={navigateTo}
         openInspectorModal={openInspectorModal}
@@ -275,12 +155,12 @@ export function App() {
         openCapabilityModal={openCapabilityModal}
       />
 
-      {/* Discreet Minimalist Scroll-to-Top Button */}
+      {/* Floating Scroll-to-Top Button */}
       {showScrollTop && (
         <div className="fixed bottom-6 right-6 z-40">
           <button
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className="w-10 h-10 rounded-full bg-[#0B1528]/80 hover:bg-[#1E293B] text-zinc-300 hover:text-white border border-white/[0.12] shadow-2xl flex items-center justify-center transition-all cursor-pointer backdrop-blur-md"
+            className="w-10 h-10 rounded-full bg-[#08253E] hover:bg-[#0D3B62] text-white border border-white/20 shadow-2xl flex items-center justify-center transition-all cursor-pointer backdrop-blur-md"
             aria-label="Scroll to top"
           >
             <ChevronUp className="w-5 h-5" />
